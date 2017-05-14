@@ -26,6 +26,8 @@ $ sudo apt-get install heroku
 
 $ heroku login
 
+$ heroku apps:create "apk-messenger-bot"
+
 # Iniltialize npm
 $ npm init
 
