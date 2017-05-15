@@ -2,6 +2,8 @@
 require('../vendor/autoload.php');
 use Mpociot\BotMan\BotManFactory;
 use Mpociot\BotMan\BotMan;
+use Mpociot\BotMan\Cache\DoctrineCache;
+
 
 $config = [
     'hipchat_urls' => [
@@ -24,12 +26,13 @@ $config = [
 // create an instance
 $botman = BotManFactory::create($config);
 $botman->verifyServices('my_secure_verify_token');
+$botman = BotManFactory::create($config, new DoctrineCache($doctrineCacheDriver));
+
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot) {
-    $bot->reply('Hello yourself.');
     $user = $bot->getUser();
-	$bot->reply('Hello '.$user->getFirstName().' '.$user->getLastName());
-	$bot->reply('Your ID is: '.$user->getId());
+	$bot->reply('Hello '.$user->getFirstName().',');
+    $bot->reply(get_greeting_message());
 });
 
 // start listening
@@ -44,4 +47,10 @@ $botman->hears("call me {name}", function (BotMan $bot, $name) {
 
     $bot->reply('I will call you '.$name);
 });
+
+$team_data_file = json_decode(file_get_contents('teamdata.json'));
+function get_greeting_message(){
+    global $team_data_file;
+    return $team_data_file['messages']['greeting'];
+}
 ?>
