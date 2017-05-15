@@ -25,8 +25,11 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
 
 
     $sh = curl_init($sender_curl);
-    curl_setopt($sh, CURLOPT_URL);
+    curl_setopt($sh, CURLOPT_URL, $sender_curl);
+    curl_setopt($sh, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($sh, CURLOPT_RETURNTRANSFER, true);
     $reply = curl_exec($sh); // user will get the message
+    curl_close($sh);
     $user = json_decode($reply,true);
 
     /*initialize curl*/
