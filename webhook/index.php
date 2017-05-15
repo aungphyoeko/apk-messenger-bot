@@ -19,7 +19,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
     $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
 
-    $sender_curl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=$PAGE_ACCESS_TOKEN" ;
+    $sender_curl = "https://graph.facebook.com/v2.6/1050211921746518?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=$PAGE_ACCESS_TOKEN" ;
     $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
     
 
@@ -37,7 +37,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$sender.', '.GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$reply.', '.GetResponseMessage($message ). '"
         }
     }';
         $ch = curl_init($url);
