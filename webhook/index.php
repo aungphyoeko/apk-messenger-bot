@@ -27,6 +27,9 @@ $botman->verifyServices('my_secure_verify_token');
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
+    $user = $bot->getUser();
+	$bot->reply('Hello '.$user->getFirstName().' '.$user->getLastName());
+	$bot->reply('Your ID is: '.$user->getId());
 });
 
 // start listening
@@ -41,6 +44,4 @@ $botman->hears("call me {name}", function (BotMan $bot, $name) {
 
     $bot->reply('I will call you '.$name);
 });
-
-
 ?>
