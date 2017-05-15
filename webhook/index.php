@@ -23,13 +23,14 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
     
     /*prepare response*/
+    $name = getUserName($sender_curl);
 
     $jsonData = '{
     "recipient":{
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$reply.', '.GetResponseMessage($message ). '"
+            "text":"(Bot): Hello '.$name.$reply.', '.GetResponseMessage($message ). '"
         }
     }';
     $ch = curl_init($url);
