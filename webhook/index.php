@@ -33,8 +33,8 @@ function get_name($surl){
     $result = curl_exec($ch);
     curl_close($ch);
     $obj = json_decode($result);
+    curl_close($ch);
     return  $obj['first_name'];
-
 }
 function send_message($sender,$url,$message = '',$name){
  /*initialize curl*/
@@ -56,6 +56,7 @@ function send_message($sender,$url,$message = '',$name){
     if (!empty($message)) {
         $result = curl_exec($ch); // user will get the message
     }
+    curl_close($ch);
 }
 
 // Processing Messages To Reply
