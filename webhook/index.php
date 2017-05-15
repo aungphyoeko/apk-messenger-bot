@@ -1,52 +1,35 @@
 <?php
+require('../vendor/autoload.php');
+use Mpociot\BotMan\BotManFactory;
+use Mpociot\BotMan\BotMan;
 
-/* validate verify token needed for setting up web hook */ 
-if (isset($_GET['hub_verify_token'])) { 
-    if ($_GET['hub_verify_token'] === 'my_secure_verify_token') {
-        echo $_GET['hub_challenge'];
-        return;
-    } else {
-        echo 'Invalid Verify Token';
-        return;
-    }
-}
+$config = [
+    'hipchat_urls' => [
+        'YOUR-INTEGRATION-URL-1',
+        'YOUR-INTEGRATION-URL-2',
+    ],
+    'nexmo_key' => 'YOUR-NEXMO-APP-KEY',
+    'nexmo_secret' => 'YOUR-NEXMO-APP-SECRET',
+    'microsoft_bot_handle' => 'YOUR-MICROSOFT-BOT-HANDLE',
+    'microsoft_app_id' => 'YOUR-MICROSOFT-APP-ID',
+    'microsoft_app_key' => 'YOUR-MICROSOFT-APP-KEY',
+    'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
+    'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
+    'facebook_token' => getenv('PAGE_ACCESS_TOKEN'),
+    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE',
+    'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
+    'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
+];
 
-$PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
-/* receive and send messages */
-$input = json_decode(file_get_contents('php://input'), true);
-if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
+// create an instance
+$botman = BotManFactory::create($config);
+$botman->verifyServices('my_secure_verify_token')
+// give the bot something to listen for.
+$botman->hears('hello', function (BotMan $bot) {
+    $bot->reply('Hello yourself.');
+});
 
-    $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
-    $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
+// start listening
+$botman->listen();
 
-    $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
-
-    /*initialize curl*/
-    $ch = curl_init($url);
-    /*prepare response*/
-
-    $jsonData = '{
-    "recipient":{
-        "id":"' . $sender . '"
-        },
-        "message":{
-            "text":"(Bot): Hay '.$sender.',' .GetResponseMessage($message ). '"
-        }
-    }';
-    /* curl setting to send a json post data */
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    if (!empty($message)) {
-        $result = curl_exec($ch); // user will get the message
-    }
-}
-
-// Processing Messages To Reply
-$TEAM_DATA;
-function GetResponseMessage($userInput){
-    global $TEAM_DATA;
-    $TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
-    return $TEAM_DATA['messages']['greeting'];
-}
 ?>
