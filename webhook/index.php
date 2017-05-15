@@ -35,9 +35,9 @@ function get_name($surl){
     curl_setopt($ch, CURLOPT_URL, $surl);
     $result = curl_exec($ch);
     curl_close($ch);
-    $obj = json_decode($result);
+    $obj = json_decode($result,true);
     curl_close($ch);
-    var_dump($obj);
+    echo $obj['frist_name'];
 }
 function send_message($sender,$url,$message = '',$name){
  /*initialize curl*/
