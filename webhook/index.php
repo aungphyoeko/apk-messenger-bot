@@ -29,7 +29,7 @@ function get_name($surl){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, '');
+    curl_setopt($ch, CURLOPT_URL, $surl);
     $result = curl_exec($ch);
     curl_close($ch);
     $obj = json_decode($result);
@@ -46,7 +46,7 @@ function send_message($sender,$url,$message = '',$name){
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$name.','.GetResponseMessage($message ). '"
+            "text":"(Bot): Hello '.$name.','.GetResponseMessage($message ). '"
         }
     }';
     /* curl setting to send a json post data */
