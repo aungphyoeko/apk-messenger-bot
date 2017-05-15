@@ -16,14 +16,14 @@ $config = [
     'slack_token' => 'YOUR-SLACK-TOKEN-HERE',
     'telegram_token' => 'YOUR-TELEGRAM-TOKEN-HERE',
     'facebook_token' => getenv('PAGE_ACCESS_TOKEN'),
-    'facebook_app_secret' => 'YOUR-FACEBOOK-APP-SECRET-HERE',
+    'facebook_app_secret' => getenv('APP_SECRET'),
     'wechat_app_id' => 'YOUR-WECHAT-APP-ID',
     'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
 ];
 
 // create an instance
 $botman = BotManFactory::create($config);
-$botman->verifyServices('my_secure_verify_token')
+$botman->verifyServices('my_secure_verify_token');
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
