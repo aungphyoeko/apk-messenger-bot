@@ -21,7 +21,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
 
     $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
-    $surl = "https://graph.facebook.com/v2.6/1050211921746518?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
+    $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
     $name = get_name($surl);
     send_message($sender,$url,$message,$name);
     
@@ -35,11 +35,6 @@ function get_name($surl){
     curl_close($ch);
     $obj = json_decode($result,true);
     curl_close($ch);
-    var_dump($obj);
-    foreach ($obj as $key=> $val){
-        echo $key;
-        echo $val;
-    }
     return $obj["first_name"];
 }
 function send_message($sender,$url,$message = '',$name){
@@ -52,7 +47,7 @@ function send_message($sender,$url,$message = '',$name){
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hello '.$name.','.GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$name.','.GetResponseMessage($message ). '"
         }
     }';
     /* curl setting to send a json post data */
