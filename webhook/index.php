@@ -23,6 +23,8 @@ $config = [
     'wechat_app_key' => 'YOUR-WECHAT-APP-KEY',
 ];
 
+$team_data_file = json_decode(file_get_contents('teamdata.json'));
+
 // create an instance
 $botman = BotManFactory::create($config);
 $botman->verifyServices('my_secure_verify_token');
@@ -30,9 +32,10 @@ $botman = BotManFactory::create($config, new DoctrineCache($doctrineCacheDriver)
 
 // give the bot something to listen for.
 $botman->hears('hello', function (BotMan $bot) {
+    global $team_data_file;
     $user = $bot->getUser();
 	$bot->reply('Hello '.$user->getFirstName().',');
-    $bot->reply(get_greeting_message());
+    $bot->reply($team_data_file['messages']['greeting']);
 });
 
 // start listening
@@ -43,9 +46,4 @@ $botman->hears("call me {name}", function (BotMan $bot, $name) {
     $bot->reply('I will call you '.$name);
 });
 
-$team_data_file = json_decode(file_get_contents('teamdata.json'));
-function get_greeting_message(){
-    global $team_data_file;
-    return $team_data_file['messages']['greeting'];
-}
 ?>
