@@ -24,6 +24,9 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     /*initialize curl*/
     $ch = curl_init($url);
     /*prepare response*/
+
+    $message = GetResponseMessage($message);
+
     $jsonData = '{
     "recipient":{
         "id":"' . $sender . '"
