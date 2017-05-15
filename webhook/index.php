@@ -39,11 +39,6 @@ $botman->hears('hello', function (BotMan $bot) {
 $botman->listen();
 
 $botman->hears("call me {name}", function (BotMan $bot, $name) {
-    // Store information for the currently logged in user.
-    // You can also pass a user-id / key as a second parameter.
-    $bot->userStorage()->save([
-        'name' => $name
-    ]);
 
     $bot->reply('I will call you '.$name);
 });
