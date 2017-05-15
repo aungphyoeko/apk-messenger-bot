@@ -25,7 +25,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
 
 
     $sh = curl_init($sender_curl);
-    curl_setopt($sh, CURLOPT_HTTPGET);
+    curl_setopt($sh, CURLOPT_URL);
     $reply = curl_exec($sh); // user will get the message
     $user = json_decode($reply,true);
 
@@ -37,7 +37,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$reply.', '.GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$sender.', '.GetResponseMessage($message ). '"
         }
     }';
         $ch = curl_init($url);
