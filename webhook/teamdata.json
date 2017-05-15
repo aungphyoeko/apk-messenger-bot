@@ -1,0 +1,36 @@
+{
+"team":{
+	"name":"Our Student Club",
+	"president":"president A",
+	"vice-president":"president B",
+	"members":[
+		"member A",
+		"member B",
+		"member C",
+		"member D"
+	]
+},
+"projects":{
+	"project A":{
+		"description":"Description for project A",
+		"startdate":"1 January 2017",
+		"enddate":"30 January 2017",
+		"url":"http://www.ourteam.com/projectA"
+	},
+	"project B":{
+		"description":"Description for project B",
+		"startdate":"15 February 2017",
+		"enddate":"1 March 2017",
+		"url":"http://www.ourteam.com/projectB"
+	}
+},
+"meeting":{
+	"type":"Weekly",
+	"day":"Friday",
+	"time":"2pm - 5pm",
+	"location":"Our club metting room"
+},
+"messages":{
+	"greeting":"Welcome to our club! What would you like to know about us?"
+}
+}

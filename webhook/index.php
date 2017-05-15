@@ -40,4 +40,12 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
         $result = curl_exec($ch); // user will get the message
     }
 }
+
+// Processing Messages To Reply
+$TEAM_DATA;
+function GetResponseMessage($userInput){
+    global $TEAM_DATA;
+    $TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
+    return $TEAM_DATA['messages']['greeting'];
+}
 ?>
