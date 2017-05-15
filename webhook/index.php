@@ -38,7 +38,7 @@ function get_name($surl){
     $obj = json_decode($result,true);
     curl_close($ch);
     var_dump($obj);
-    echo $obj['firstname'];
+    echo $obj[0]['firstname'];
 }
 function send_message($sender,$url,$message = '',$name){
  /*initialize curl*/
