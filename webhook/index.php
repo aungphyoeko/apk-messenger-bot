@@ -24,6 +24,10 @@ $config = [
 // create an instance
 $botman = BotManFactory::create($config);
 $botman->verifyServices('my_secure_verify_token');
+// give the bot something to listen for.
+$botman->hears('hello', function (BotMan $bot) {
+    $bot->reply('Hello yourself.');
+});
 
 // start listening
 $botman->listen();
@@ -31,14 +35,11 @@ $botman->listen();
 $botman->hears("call me {name}", function (BotMan $bot, $name) {
     // Store information for the currently logged in user.
     // You can also pass a user-id / key as a second parameter.
-    
+    $bot->userStorage()->save([
+        'name' => $name
+    ]);
+
     $bot->reply('I will call you '.$name);
-});
-
-
-$botman->hears('Hello', function($bot) {
-	
-	$bot->reply('Welcome');
 });
 
 
