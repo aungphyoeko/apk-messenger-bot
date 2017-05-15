@@ -12,8 +12,6 @@ if (isset($_GET['hub_verify_token'])) {
 }
 
 $PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
-    $surl = "https://graph.facebook.com/v2.6/1050211921746518?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
-     get_name($surl);
 
 /* receive and send messages */
 $input = json_decode(file_get_contents('php://input'), true);
@@ -42,7 +40,7 @@ function get_name($surl){
         echo $key;
         echo $val;
     }
-    print_r($obj["first_name"]);
+    return $obj["first_name"];
 }
 function send_message($sender,$url,$message = '',$name){
  /*initialize curl*/
