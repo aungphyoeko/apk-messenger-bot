@@ -22,15 +22,18 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     $sender_curl = "https://graph.facebook.com/v2.6/1050211921746518?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=$PAGE_ACCESS_TOKEN" ;
     $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
     
+    send_message($sender,$url,"");
+    
+}
+function send_message($sender,$url, $message = ""){
     /*prepare response*/
-    $name = getUserName($sender_curl);
 
     $jsonData = '{
     "recipient":{
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hello '.$name.', '.GetResponseMessage($message ). '"
+            "text":"(Bot): Hello, '.GetResponseMessage($message ). '"
         }
     }';
     $ch = curl_init($url);
@@ -42,7 +45,6 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     if (!empty($message)) {
         $result = curl_exec($ch); // user will get the message
     }
-    
 }
 function getUserName($curl){
     $ch = curl_init();
