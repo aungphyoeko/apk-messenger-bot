@@ -19,7 +19,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
     $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
 
-    //$sender_curl = "https://graph.facebook.com/v2.6/1050211921746518?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=$PAGE_ACCESS_TOKEN" ;
+    $sender_curl = "https://graph.facebook.com/v2.6/1050211921746518?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=$PAGE_ACCESS_TOKEN" ;
     $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
     
     /*prepare response*/
@@ -41,6 +41,19 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
     if (!empty($message)) {
         $result = curl_exec($ch); // user will get the message
     }
+    
+}
+function getUserName($curl){
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $curl);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    $obj = json_decode($result);
+    return $obj['first_name'];
+
 }
 
 // Processing Messages To Reply
