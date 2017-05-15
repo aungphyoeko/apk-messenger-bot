@@ -35,7 +35,6 @@ $botman->hears('hello', function (BotMan $bot) {
     global $team_data_file;
     $user = $bot->getUser();
 	$bot->reply('Hello '.$user->getFirstName().',');
-    $bot->reply($team_data_file['messages']['greeting']);
 });
 
 // start listening
