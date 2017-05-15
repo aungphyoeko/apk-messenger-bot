@@ -11,21 +11,8 @@ if (isset($_GET['hub_verify_token'])) {
     }
 }
 
-$PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
+$fbMessenger = Messenger();
 
-/* receive and send messages */
-$input = json_decode(file_get_contents('php://input'), true);
-if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
-
-    $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
-    $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
-
-    $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
-    $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
-    $name = get_name($surl);
-    send_message($sender,$url,$message,$name);
-    
-}
 function get_name($surl){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -37,17 +24,47 @@ function get_name($surl){
     curl_close($ch);
     return $obj["first_name"];
 }
-function send_message($sender,$url,$message = '',$name){
+
+
+// Processing Messages To Reply
+$TEAM_DATA;
+function GetResponseMessage($userInput){
+    global $TEAM_DATA;
+    $TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
+    return $TEAM_DATA['messages']['greeting'];
+}
+?>
+<?php
+class Messenger {
+    protected $PAGE_ACCESS_TOKEN;
+    protected $input;
+    protected $sender_id;
+    protected $url;
+    public function __construct(){
+        $this->PAGE_ACCESS_TOKEN  = getenv('PAGE_ACCESS_TOKEN');
+        $this->input = json_decode(file_get_contents('php://input'), true);
+        /* receive and send messages */
+            if (isset($this->input['entry'][0]['messaging'][0]['sender']['id'])) {
+
+                $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
+                $message = $this->input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
+
+                $this->url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
+                //$surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
+                $this->send_message($message);
+            }
+    }
+    public function send_message($message = ''){
  /*initialize curl*/
-    $ch = curl_init($url);
+    $ch = curl_init($this->url);
     /*prepare response*/
 
     $jsonData = '{
     "recipient":{
-        "id":"' . $sender . '"
+        "id":"' . $this->sender_id . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$name.','.GetResponseMessage($message ). '"
+            "text":"(Bot): Hello,'.$message. '"
         }
     }';
     /* curl setting to send a json post data */
@@ -59,12 +76,7 @@ function send_message($sender,$url,$message = '',$name){
     }
     curl_close($ch);
 }
-
-// Processing Messages To Reply
-$TEAM_DATA;
-function GetResponseMessage($userInput){
-    global $TEAM_DATA;
-    $TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
-    return $TEAM_DATA['messages']['greeting'];
+   
 }
+
 ?>
