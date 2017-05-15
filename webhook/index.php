@@ -42,6 +42,7 @@ $botman->hears("call me {name}", function (BotMan $bot, $name) {
 $botman->hears('Hello', function($bot) {
 	$user = $bot->getUser();
 	$bot->reply('Hello '.$user->getFirstName().' '.$user->getLastName());
+	$bot->reply('Your username is: '.$user->getUsername());
 	$bot->reply('Your ID is: '.$user->getId());
 });
 
