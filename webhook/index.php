@@ -46,7 +46,7 @@ function send_message($sender,$url,$message = '',$name){
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hello,' .GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$name.','.GetResponseMessage($message ). '"
         }
     }';
     /* curl setting to send a json post data */
