@@ -42,6 +42,7 @@ function get_name($surl){
         echo $key;
         echo $val;
     }
+    print_r($obj["first_name"]);
 }
 function send_message($sender,$url,$message = '',$name){
  /*initialize curl*/
