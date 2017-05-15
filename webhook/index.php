@@ -30,7 +30,7 @@ if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
         "id":"' . $sender . '"
         },
         "message":{
-            "text":"(Bot): Hello '.$name.$reply.', '.GetResponseMessage($message ). '"
+            "text":"(Bot): Hello '.$name.', '.GetResponseMessage($message ). '"
         }
     }';
     $ch = curl_init($url);
