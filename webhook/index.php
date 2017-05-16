@@ -19,12 +19,14 @@ class Messenger{
     protected $sender_name;
     protected $reply_message;
     protected $reply_json;
+    protected $is_waiting;
 
     public function __construct(){
         $this->sender_message = '';
         $this->sender_id = 0;
         $this->sender_name = '';
         $this->reply_message = '';
+        $this->is_waiting = true;
     }
     public function verify_page_access($page_token){
         $this->PAGE_ACCESS_TOKEN = getenv($page_token);
@@ -55,7 +57,7 @@ class Messenger{
     public function set_reply_message($data = ''){
         if($data == ''){
             /* default message to reply what sender said*/
-            $data =  $this->sender_message;
+            $data =  '(Bot): Hi '.$this->sender_name.', you said,'.$this->sender_message;
         }
         $this->reply_message = $data;
     }
@@ -66,8 +68,10 @@ class Messenger{
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
             $this->sender_name = $this->request_sender_name();
             $this->reply_message = '';
+            $this->is_waiting = false;
             return true;
         }
+        $this->is_waiting = true;
         $this->sender_message = '';
         $this->reply_message = '';
         return false;
@@ -80,7 +84,7 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        if ($this->reply_message != ''){
+        if (!$this->is_waiting){
             $result = $this->curl_send_post_request($url,$this->reply_json);
         }
     }
