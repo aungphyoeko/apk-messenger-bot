@@ -1,15 +1,25 @@
 <?php
+$messenger = new Messenger();
+return $messenger->verify_webhook();
+class Messenger{
+    public function __construct(){
 
-/* validate verify token needed for setting up web hook */ 
-if (isset($_GET['hub_verify_token'])) { 
-    if ($_GET['hub_verify_token'] === 'my_secure_verify_token') {
-        echo $_GET['hub_challenge'];
-        return;
-    } else {
-        echo 'Invalid Verify Token';
-        return;
+    }
+    public function verify_webhook(){
+    /* validate verify token needed for setting up web hook */ 
+    if (isset($_GET['hub_verify_token'])) { 
+        if ($_GET['hub_verify_token'] === 'my_secure_verify_token') {
+            echo $_GET['hub_challenge'];
+            return;
+        } else {
+            echo 'Invalid Verify Token';
+            return;
+        }
+    }
     }
 }
+
+
 
 $PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
 
