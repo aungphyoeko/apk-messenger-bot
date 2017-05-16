@@ -1,6 +1,6 @@
 <?php
 $messenger = new Messenger();
-$messenger->verify_token('my_secure_verify_token','PAGE_ACCESS_TOKEN');
+$messenger->verify_token('my_secure_verify_token');
 $messenger->listen_message();
 $messenger->set_reply_message();
 $messenger->encode_reply_message();
@@ -15,18 +15,17 @@ class Messenger{
     protected $reply_json;
 
     public function __construct(){
-        $this->PAGE_ACCESS_TOKEN = ''; 
+        $this->PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
         $this->sender_message = '';
         $this->sender_id = 0;
         $this->sender_name = '';
         $this->reply_message = '';
     }
-    public function verify_token($my_token,$env_key_name){
+    public function verify_token($my_token){
         /* validate verify token needed for setting up web hook */ 
         if (isset($_GET['hub_verify_token'])) { 
             if ($_GET['hub_verify_token'] === $my_token) {
                 echo $_GET['hub_challenge'];
-                $this->PAGE_ACCESS_TOKEN = getenv($env_key_name);
                 return;
             } else {
                 echo 'Invalid Verify Token';
