@@ -16,39 +16,13 @@ $fbMessenger->set_reply_message();
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
 */
+$greeting = $myTeam->get_greeting_message();
+$fbMessenger->listen_message();
 
-/**** COMMANDS CLAS ****/
-$command = new Command($fbMessenger,$myTeam);
-$command->hear('GREETING',function(Messenger $fbMessenger,Team $myTeam){
-    $message = $myTeam->get_greeting_message();
-    $fbMessenger->set_reply_message($message);
-    $fbMessenger->encode_reply_message();
-    $fbMessenger->send_message(); 
-});
-class Command{
-    protected $KEYWORDS;
-    protected $fbMessenger;
-    protected $myTeam;
-    public function __construct($fbMessenger,$myTeam){
-        $this->fbMessenger = $fbMessenger;
-        $this->myTeam = $myTeam;
-        $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
-    }
-    public function hear($message,$callback){
-        $hear = $this->fbMessenger->listen_message();
-        if(array_key_exists($message,$this->KEYWORDS)){  
-            if(in_array(strtolower($hear),$this->KEYWORDS[$message])){
-                return $callback($this->fbMessenger,$this->myTeam);
-            }
-        }
-        $fbMessenger->set_reply_message();
-        $fbMessenger->encode_reply_message();
-        $fbMessenger->send_message();
-
-        return;
-    }
-}
-/**** TEAM CLASS ****/
+$fbMessenger->set_reply_message($greeting);
+$fbMessenger->encode_reply_message();
+$fbMessenger->send_message();
+//**** TEAM CLASS ****/
 class Team{
     protected $TEAM_DATA;
     protected $team_info;
