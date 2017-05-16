@@ -8,7 +8,6 @@ $fbMessenger->verify_token('my_secure_verify_token');
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
 /* set team data */
-$myTeam->read_data_file('teamdata.json');
 
 /* Testing conversation
 $fbMessenger->listen_message();
@@ -23,7 +22,50 @@ $fbMessenger->set_reply_message($greeting);
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
 
-
+/**** TEAM CLASS ****/
+class Team{
+    protected $TEAM_DATA;
+    protected $team_info;
+    protected $team_members; 
+    public function __construct(){
+        $this->TEAM_DATA = array();
+        $this->TEAM_DATA = json_decode( file_get_contents($filename));
+        $this->team_info = array(
+            'name'=>'',
+            'description'=>''
+            );
+        $this->team_members = array(
+            array(
+                'name'=>'',
+                'position'=>''
+                )
+            );
+    }
+    public function read_data_file($filename){
+        $this->TEAM_DATA = json_decode( file_get_contents($filename));
+    }
+    public function set_team_info(){
+        $this->team_info['name'] = $this->TEAM_DATA['name'];
+        $this->team_info['description'] = $this->TEAM_DATA['description'];
+    }
+    public function get_team_info(){
+        return $this->team_info;
+    }
+    public function set_team_members(){
+        $this->team_members = array();
+        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['president'],'position'=>'President'));
+        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['vice-president'],'position'=>'Vice President'));
+        foreach($this->TEAM_DATA['team']['members'] as $member_name){
+            array_push($this->team_members, array('name'=> $member_name,'position'=>'Member'));
+        }
+    }
+    public function get_team_members(){
+        return $this->team_members;
+    }
+    public function get_greeting_message(){
+        return $this->TEAM_DATA['messages']['greeting'];
+    }
+}
 /**** Messenger class ****/
 class Messenger{
     protected $PAGE_ACCESS_TOKEN;
@@ -116,49 +158,6 @@ class Messenger{
         $obj = json_decode($result,true);
         curl_close($ch);
         return $obj;
-    }
-}
-/**** TEAM CLASS ****/
-class Team{
-    protected $TEAM_DATA;
-    protected $team_info;
-    protected $team_members; 
-    public function __construct(){
-        $this->TEAM_DATA = array();
-        $this->team_info = array(
-            'name'=>'',
-            'description'=>''
-            );
-        $this->team_members = array(
-            array(
-                'name'=>'',
-                'position'=>''
-                )
-            );
-    }
-    public function read_data_file($filename){
-        $this->TEAM_DATA = json_decode( file_get_contents($filename));
-    }
-    public function set_team_info(){
-        $this->team_info['name'] = $this->TEAM_DATA['name'];
-        $this->team_info['description'] = $this->TEAM_DATA['description'];
-    }
-    public function get_team_info(){
-        return $this->team_info;
-    }
-    public function set_team_members(){
-        $this->team_members = array();
-        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['president'],'position'=>'President'));
-        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['vice-president'],'position'=>'Vice President'));
-        foreach($this->TEAM_DATA['team']['members'] as $member_name){
-            array_push($this->team_members, array('name'=> $member_name,'position'=>'Member'));
-        }
-    }
-    public function get_team_members(){
-        return $this->team_members;
-    }
-    public function get_greeting_message(){
-        return $this->TEAM_DATA['messages']['greeting'];
     }
 }
 ?>
