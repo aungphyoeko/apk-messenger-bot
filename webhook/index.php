@@ -38,7 +38,7 @@ class Messenger{
             "id":"' . $this->sender_id . '"
             },
             "message":{
-                "text":"(Bot): '.$this->sender_name. ', You said, '.$this->sender_message. '"
+                "text":"(Bot): Hi '.$this->sender_name. ', You said, '.$this->sender_message. '"
             }
         }';
     }
