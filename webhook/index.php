@@ -18,8 +18,6 @@ class Messenger{
 
             $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $this->message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
-
-            $this->send_message($sender,$url,$message,$name);    
         }
     }
     public function verify_webhook(){
