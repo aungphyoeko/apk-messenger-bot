@@ -22,6 +22,58 @@ $fbMessenger->listen_message();
 $fbMessenger->set_reply_message($greeting);
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
+/**** COMMANDS CLAS ****/
+$command = new Command($fbMessenger,$myTeam);
+class Command{
+    protected $KEYWORDS;
+    protected $fbMessenger;
+    protected $myTeam;
+    public function __construct($fbMessenger,$myTeam){
+        $this->fbMessenger = $fbMessenger;
+        $this->myTeam = $myTeam;
+        $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
+        $hear = $fbMessenger->listen_message();
+        foreach($this->KEYWORDS as $command => $keyword){
+            switch($command){
+                case 'GREETING':
+                    in_array($hear,$keyword)?$this->command_greeting():false;
+                    break;
+                case 'BYE':
+                    in_array($hear,$keyword)?$this->command_bye():false;
+                    break;
+                case 'MEMBERS':
+                    in_array($hear,$keyword)?$this->command_members():false;
+                    break;
+                default:
+            }
+        }
+    }
+    
+    public function command_greeting(){
+        $message = $this->myTeam->get_greeting_message();
+        $this->fbMessenger->set_reply_message($message);
+        $this->fbMessenger->send_message(); 
+    }
+    public function command_bye(){
+        $message = $this->myTeam->get_goodbye_message();
+        $this->fbMessenger->set_reply_message($message);
+        $this->fbMessenger->send_message(); 
+    }
+    public function command_members(){
+        $this->myTeam->set_team_members();
+        $message='Our Team members are:';
+        $this->fbMessenger->set_reply_message($message);
+        $this->fbMessenger->send_message(); 
+        foreach($this->myTeam->get_team_members() as $member){
+            $message = 'Name : '.$member['name'];
+            $this->fbMessenger->set_reply_message($message);
+            $this->fbMessenger->send_message(); 
+            $message = 'Posittion : '.$member['position'];
+            $this->fbMessenger->set_reply_message($message);
+            $this->fbMessenger->send_message(); 
+        }
+    }
+}
 
 /**** TEAM CLASS ****/
 class Team{
@@ -112,6 +164,7 @@ class Messenger{
             /* default message to reply what sender said*/
             $data =  '(Bot): Hi '.$this->sender_name.',you said, '.$this->sender_message;
         }
+        $data = preg_replace('/\{name\}/',$this->sender_name,$data);
         $this->reply_message = $data;
     }
     public function listen_message(){

@@ -32,6 +32,7 @@
 	"location":"Our club metting room"
 },
 "messages":{
-	"greeting":"Welcome to our club! What would you like to know about us?"
+	"greeting":"Hi {name}, welcome to our club! What would you like to know about us?",
+	"bye":"Thank you {name}! See you again!"
 }
 }

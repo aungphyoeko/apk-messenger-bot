@@ -1,0 +1,9 @@
+{
+"GREETING":[
+	"hi","hello","there?","hay","hey","good morning","morning","good evening"
+],
+"BYE":["bye","good bye","see you", "see ya"],
+"YES":["yes","ype","yeah","ok","k","ya","of course","sure","kk","okay"],
+"NO":["No","Nope","Nah","Nan","Hell No","No way"],
+"MEMBERS":["members","member","who are you","who r u", "who r you"]
+}
