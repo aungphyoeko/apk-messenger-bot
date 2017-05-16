@@ -1,7 +1,12 @@
 <?php
+/* create messenger instance */
 $messenger = new Messenger();
+
+/* configure verification between bot and fb */
 $messenger->verify_token('my_secure_verify_token');
 $messenger->verify_page_access('PAGE_ACCESS_TOKEN');
+
+/* start conservation */
 $messenger->listen_message();
 $messenger->set_reply_message();
 $messenger->encode_reply_message();
@@ -25,7 +30,7 @@ class Messenger{
         $this->PAGE_ACCESS_TOKEN = getenv($page_token);
     }
     public function verify_token($my_token){
-        /* validate verify token needed for setting up web hook */ 
+        /* validate verify token for setting up web hook */ 
         if (isset($_GET['hub_verify_token'])) { 
             if ($_GET['hub_verify_token'] === $my_token) {
                 echo $_GET['hub_challenge'];
@@ -37,19 +42,20 @@ class Messenger{
         }
     }
     public function encode_reply_message(){
-        /*prepare response*/
+        /*prepare response json */
         $this->reply_json = '{
         "recipient":{
             "id":"' . $this->sender_id . '"
             },
             "message":{
-                "text":"(Bot): Hi '.$this->sender_name. ', You said, '.$this->reply_message. '"
+                "text":" '.$this->reply_message. '"
             }
         }';
     }
     public function set_reply_message($data = ''){
         if($data == ''){
-            $data = $this->sender_message;
+            /* default message to reply what sender said*/
+            $data =  '(Bot): Hi '.$this->sender_name.', you said,'.$this->sender_message;
         }
         $this->reply_message = $data;
     }
