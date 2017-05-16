@@ -1,23 +1,27 @@
 <?php
 /* create messenger instance */
-$messenger = new Messenger();
+$fbMessenger = new Messenger();
+$myTeam = new Team();
 
 /* configure verification between bot and fb */
-$messenger->verify_token('my_secure_verify_token');
-$messenger->verify_page_access('PAGE_ACCESS_TOKEN');
+$fbMessenger->verify_token('my_secure_verify_token');
+$fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
-/* start conservation */
-$messenger->listen_message();
-$messenger->set_reply_message();
-$messenger->encode_reply_message();
-$messenger->send_message();
+/* Testing conversation
+$fbMessenger->listen_message();
+$fbMessenger->set_reply_message();
+$fbMessenger->encode_reply_message();
+$fbMessenger->send_message();
+*/
+$greeting = $myTeam->get_greeting_message();
+$fbMessenger->listen_message();
 
-$messenger->set_reply_message("bla bla bla");
-$messenger->encode_reply_message();
-$messenger->send_message();
+$fbMessenger->set_reply_message($greeting);
+$fbMessenger->encode_reply_message();
+$fbMessenger->send_message();
 
 
-/* Messenger class */
+/**** Messenger class ****/
 class Messenger{
     protected $PAGE_ACCESS_TOKEN;
     protected $sender_message;
@@ -72,11 +76,11 @@ class Messenger{
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
             $this->sender_name = $this->request_sender_name();
             $this->reply_message = '';
-            return true;
+            return $this->sender_message;
         }
         $this->sender_message = '';
         $this->reply_message = '';
-        return false;
+        return '';
     }
     protected function request_sender_name(){
         $url = "https://graph.facebook.com/v2.6/$this->sender_id?fields=first_name,last_name&access_token=$this->PAGE_ACCESS_TOKEN";
@@ -111,7 +115,7 @@ class Messenger{
         return $obj;
     }
 }
-
+/**** TEAM CLASS ****/
 class Team{
     protected $TEAM_DATA;
     protected $team_info;
@@ -150,6 +154,8 @@ class Team{
     public function get_team_members(){
         return $this->team_members;
     }
-
+    public function get_greeting_message(){
+        return $this->TEAM_DATA['messages']['greeting'];
+    }
 }
 ?>
