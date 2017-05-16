@@ -47,7 +47,7 @@ public function get_name(){
     $this->sender_name = $obj["first_name"];
     return $this->sender_name;
 }
-public function send_message($message = ''){
+public function send_message(){
     $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
  /*initialize curl*/
     $ch = curl_init($url);
@@ -58,7 +58,7 @@ public function send_message($message = ''){
         "id":"' . $this->sender_id . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$this->name.','.GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$this->sender_name.','.$this->message . '"
         }
     }';
     /* curl setting to send a json post data */
