@@ -84,7 +84,7 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        if (!$this->is_waiting){
+        if ($this->is_waiting){
             $result = $this->curl_send_post_request($url,$this->reply_json);
         }
     }
