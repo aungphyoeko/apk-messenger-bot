@@ -16,15 +16,14 @@ $fbMessenger->set_reply_message();
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
 */
-$greeting = $myTeam->get_greeting_message();
-$fbMessenger->listen_message();
 
-$fbMessenger->set_reply_message($greeting);
-$fbMessenger->encode_reply_message();
-$fbMessenger->send_message();
 /**** COMMANDS CLAS ****/
 $command = new Command($fbMessenger,$myTeam);
-
+$command->hear('GREETING',function(Messenger $fbMessenger,Team $myTeam){
+    $message = $myTeam->get_greeting_message();
+    $fbMessenger->set_reply_message($message);
+    $fbMessenger->send_message(); 
+});
 class Command{
     protected $KEYWORDS;
     protected $fbMessenger;
