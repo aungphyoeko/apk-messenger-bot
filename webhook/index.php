@@ -37,7 +37,7 @@ class Messenger{
             "id":"' . $this->sender_id . '"
             },
             "message":{
-                "text":"(Bot): Hello '.$this->sender_name. ', You said, '.$this->sender_message. '"
+                "text":"(Bot): Hi '.$this->sender_name. ', You said, '.$this->sender_message. '"
             }
         }';
     }
@@ -60,16 +60,17 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        if($this->sender_message != '') {$this->curl_send_post_request($url,$this->sender_message);}
-    }
-    protected function curl_send_post_request($url,$data){
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->reply_message);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $result = curl_exec($ch); // user will get the message
+        if ($this->sender_message != ''){
+            $result = curl_exec($ch); // user will get the message
+        }
         curl_close($ch);
-        return $result;
+    }
+    protected function curl_send_post_request($url,$data){
+
     }
     protected function curl_send_get_request($url){
         $ch = curl_init();
