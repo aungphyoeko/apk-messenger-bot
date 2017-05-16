@@ -10,11 +10,14 @@ class Messenger{
     protected $PAGE_ACCESS_TOKEN;
     protected $sender_message;
     protected $sender_id;
+    protected $sender_name;
     protected $reply_message;
+
     public function __construct(){
         $this->PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
         $this->sender_message = '';
         $this->sender_id = 0;
+        $this->sender_name = '';
     }
     public function verify_token($my_token){
         /* validate verify token needed for setting up web hook */ 
@@ -35,7 +38,7 @@ class Messenger{
             "id":"' . $this->sender_id . '"
             },
             "message":{
-                "text":"(Bot): You said, '.$this->sender_message. '"
+                "text":"(Bot): '.$this->sender_name. ', You said, '.$this->sender_message. '"
             }
         }';
     }
@@ -44,10 +47,16 @@ class Messenger{
         if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
             $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
+            $this->sender_name = $this->request_sender_name();
             return true;
         }
         $this->sender_message = '';
         return false;
+    }
+    protected function request_sender_name(){
+        $url = "https://graph.facebook.com/v2.6/$this->sender_id?fields=first_name,last_name&access_token=$this->PAGE_ACCESS_TOKEN";
+        $sender = $this->curl_send_get_request($url);
+        return $sender["first_name"];
     }
 
     public function send_message(){
@@ -60,6 +69,17 @@ class Messenger{
             $result = curl_exec($ch); // user will get the message
         }
         curl_close($ch);
+    }
+    protected function curl_send_get_request($url){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $obj = json_decode($result,true);
+        curl_close($ch);
+        return $obj;
     }
 }
 ?>
