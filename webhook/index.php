@@ -8,6 +8,7 @@ $fbMessenger->verify_token('my_secure_verify_token');
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
 /* set team data */
+$myTeam->read_data_file('teamdata.json');
 
 /* Testing conversation
 $fbMessenger->listen_message();
@@ -29,7 +30,6 @@ class Team{
     protected $team_members; 
     public function __construct(){
         $this->TEAM_DATA = array();
-        $this->TEAM_DATA = json_decode( file_get_contents($filename));
         $this->team_info = array(
             'name'=>'',
             'description'=>''
@@ -42,7 +42,7 @@ class Team{
             );
     }
     public function read_data_file($filename){
-        $this->TEAM_DATA = json_decode( file_get_contents($filename));
+        $this->TEAM_DATA = json_decode( file_get_contents($filename),true);
     }
     public function set_team_info(){
         $this->team_info['name'] = $this->TEAM_DATA['name'];
