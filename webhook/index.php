@@ -1,10 +1,9 @@
 <?php
 $messenger = new Messenger();
 $messenger->verify_token('my_secure_verify_token');
-if($messenger->listen_message()){
-    $messenger->process_reply_message();
-    $messenger->send_message();
-}
+$messenger->listen_message();
+$messenger->process_reply_message();
+$messenger->send_message();
 
 class Messenger{
     protected $PAGE_ACCESS_TOKEN;
