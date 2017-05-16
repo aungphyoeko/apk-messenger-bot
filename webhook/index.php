@@ -110,7 +110,7 @@ class Messenger{
     }
 }
 class Team {
-    
+    ;
     public function __construct(){
 
     }
