@@ -20,14 +20,12 @@ class Messenger{
     protected $sender_name;
     protected $reply_message;
     protected $reply_json;
-    protected $i;
 
     public function __construct(){
         $this->sender_message = '';
         $this->sender_id = 0;
         $this->sender_name = '';
         $this->reply_message = '';
-        $this->i=0;
     }
     public function verify_page_access($page_token){
         $this->PAGE_ACCESS_TOKEN = getenv($page_token);
@@ -56,10 +54,9 @@ class Messenger{
         }';
     }
     public function set_reply_message($data = ''){
-        if($data == ''){
-            $this->i ++;
+        if($data == '' && $this->sender_message != ''){
             /* default message to reply what sender said*/
-            $data =  '(Bot): Hi '.$this->i;
+            $data =  '(Bot): Hi '.$this->sender_name.',you said, '.$this->sender_message;
         }
         $this->reply_message = $data;
     }
@@ -109,10 +106,5 @@ class Messenger{
         return $obj;
     }
 }
-class Team {
-    ;
-    public function __construct(){
 
-    }
-}
 ?>
