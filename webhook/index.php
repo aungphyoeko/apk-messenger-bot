@@ -25,31 +25,6 @@ $fbMessenger->send_message();
 /**** COMMANDS CLAS ****/
 $command = new Command($fbMessenger,$myTeam);
 
-$command->hear('GREETING',function(Messenger $fbMessenger,Team $myTeam){
-    $message = $myTeam->get_greeting_message();
-    $fbMessenger->set_reply_message($message);
-    $fbMessenger->send_message(); 
-});
-$command->hear('BYE',function(Messenger $fbMessenger,Team $myTeam){
-    $message = $myTeam->get_goodbye_message();
-    $fbMessenger->set_reply_message($message);
-    $fbMessenger->send_message(); 
-});
-$command->hear('MEMBERS',function(Messenger $fbMessenger,Team $myTeam){
-    $myTeam->set_team_members();
-    $message='Our Team members are:';
-    $fbMessenger->set_reply_message($message);
-    $fbMessenger->send_message(); 
-    foreach($myTeam->get_team_members() as $member){
-        $message = 'Name : '.$member['name'];
-        $fbMessenger->set_reply_message($message);
-        $fbMessenger->send_message(); 
-        $message = 'Posittion : '.$member['position'];
-        $fbMessenger->set_reply_message($message);
-        $fbMessenger->send_message(); 
-    }
-   
-});
 class Command{
     protected $KEYWORDS;
     protected $fbMessenger;
