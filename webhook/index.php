@@ -72,7 +72,6 @@ public function send_message($sender,$url,$message = '',$name){
 
 }
 
-
 // Processing Messages To Reply
 $TEAM_DATA;
 function GetResponseMessage($userInput){
