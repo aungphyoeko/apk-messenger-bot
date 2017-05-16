@@ -19,14 +19,12 @@ class Messenger{
     protected $sender_name;
     protected $reply_message;
     protected $reply_json;
-    protected $is_can_reply;
 
     public function __construct(){
         $this->sender_message = '';
         $this->sender_id = 0;
         $this->sender_name = '';
         $this->reply_message = '';
-        $this->is_can_reply = false;
     }
     public function verify_page_access($page_token){
         $this->PAGE_ACCESS_TOKEN = getenv($page_token);
@@ -55,21 +53,19 @@ class Messenger{
         }';
     }
     public function set_reply_message($data = ''){
-        if($data == ''){
+        if($data == '' && $this->sender_message != ''){
             /* default message to reply what sender said*/
-            $data =  $this->sender_message;
+            $data =  '(Bot): Hi '.$this->sender_name.','.$this->sender_message;
         }
         $this->reply_message = $data;
     }
     public function listen_message(){
-        $this->is_can_reply = false;
         $input = json_decode(file_get_contents('php://input'), true);
         if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
             $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
             $this->sender_name = $this->request_sender_name();
             $this->reply_message = '';
-            $this->is_can_reply = true;
             return true;
         }
         $this->sender_message = '';
@@ -84,7 +80,7 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        if ($this->is_can_reply){
+        if ($this->reply_message != ''){
             $result = $this->curl_send_post_request($url,$this->reply_json);
         }
     }
