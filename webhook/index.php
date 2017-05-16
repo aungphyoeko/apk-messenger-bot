@@ -24,6 +24,32 @@ $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
 /**** COMMANDS CLAS ****/
 $command = new Command($fbMessenger,$myTeam);
+
+$command->hear('GREETING',function(Messenger $fbMessenger,Team $myTeam){
+    $message = $myTeam->get_greeting_message();
+    $fbMessenger->set_reply_message($message);
+    $fbMessenger->send_message(); 
+});
+$command->hear('BYE',function(Messenger $fbMessenger,Team $myTeam){
+    $message = $myTeam->get_goodbye_message();
+    $fbMessenger->set_reply_message($message);
+    $fbMessenger->send_message(); 
+});
+$command->hear('MEMBERS',function(Messenger $fbMessenger,Team $myTeam){
+    $myTeam->set_team_members();
+    $message='Our Team members are:';
+    $fbMessenger->set_reply_message($message);
+    $fbMessenger->send_message(); 
+    foreach($myTeam->get_team_members() as $member){
+        $message = 'Name : '.$member['name'];
+        $fbMessenger->set_reply_message($message);
+        $fbMessenger->send_message(); 
+        $message = 'Posittion : '.$member['position'];
+        $fbMessenger->set_reply_message($message);
+        $fbMessenger->send_message(); 
+    }
+   
+});
 class Command{
     protected $KEYWORDS;
     protected $fbMessenger;
@@ -32,54 +58,17 @@ class Command{
         $this->fbMessenger = $fbMessenger;
         $this->myTeam = $myTeam;
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
-        $hear = $fbMessenger->listen_message();
-        foreach($this->KEYWORDS as $command => $keyword){
-            switch($command){
-                case 'GREETING':
-                    in_array($hear,$keyword)?$this->command_greeting():false;
-                    break;
-                case 'BYE':
-                    in_array($hear,$keyword)?$this->command_bye():false;
-                    break;
-                case 'MEMBERS':
-                    in_array($hear,$keyword)?$this->command_members():false;
-                    break;
-                default:
+    }
+    public function hear($message,$callback){
+        $hear = $this->fbMessenger->listen_message();
+        if(array_key_exists($message,$this->KEYWORDS)){  
+            if(in_array(strtolower($hear),$this->KEYWORDS[$message])){
+                return $callback($this->fbMessenger,$this->myTeam);
             }
         }
-    }
-    
-    public function command_greeting(){
-        $message = $this->myTeam->get_greeting_message();
-        $this->fbMessenger->set_reply_message($message);
-        $fbMessenger->encode_reply_message();
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_bye(){
-        $message = $this->myTeam->get_goodbye_message();
-        $this->fbMessenger->set_reply_message($message);
-        $fbMessenger->encode_reply_message();
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_members(){
-        $this->myTeam->set_team_members();
-        $message='Our Team members are:';
-        $this->fbMessenger->set_reply_message($message);
-        $fbMessenger->encode_reply_message();
-        $this->fbMessenger->send_message(); 
-        foreach($this->myTeam->get_team_members() as $member){
-            $message = 'Name : '.$member['name'];
-            $this->fbMessenger->set_reply_message($message);
-            $fbMessenger->encode_reply_message();
-            $this->fbMessenger->send_message(); 
-            $message = 'Posittion : '.$member['position'];
-            $this->fbMessenger->set_reply_message($message);
-            $fbMessenger->encode_reply_message();
-            $this->fbMessenger->send_message(); 
-        }
+        return;
     }
 }
-
 /**** TEAM CLASS ****/
 class Team{
     protected $TEAM_DATA;
@@ -101,13 +90,6 @@ class Team{
     public function read_data_file($filename){
         $this->TEAM_DATA = json_decode( file_get_contents($filename),true);
     }
-    public function set_team_info(){
-        $this->team_info['name'] = $this->TEAM_DATA['name'];
-        $this->team_info['description'] = $this->TEAM_DATA['description'];
-    }
-    public function get_team_info(){
-        return $this->team_info;
-    }
     public function set_team_members(){
         $this->team_members = array();
         array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['president'],'position'=>'President'));
@@ -116,11 +98,22 @@ class Team{
             array_push($this->team_members, array('name'=> $member_name,'position'=>'Member'));
         }
     }
+    public function set_team_info(){
+        $this->team_info['name'] = $this->TEAM_DATA['name'];
+        $this->team_info['description'] = $this->TEAM_DATA['description'];
+    }
+    public function get_team_info(){
+        return $this->team_info;
+    }
+    
     public function get_team_members(){
         return $this->team_members;
     }
     public function get_greeting_message(){
         return $this->TEAM_DATA['messages']['greeting'];
+    }
+    public function get_goodbye_message(){
+         return $this->TEAM_DATA['messages']['bye'];
     }
 }
 /**** Messenger class ****/
