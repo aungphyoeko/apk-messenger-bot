@@ -18,7 +18,6 @@ class Messenger{
 
             $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $this->message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
-
         }
     }
     public function verify_webhook(){
@@ -48,20 +47,17 @@ public function get_name(){
     $this->sender_name = $obj["first_name"];
     return $this->sender_name;
 }
-public function send_message($message = ''){
-    $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
- /*initialize curl*/
-    $ch = curl_init($url);
-    /*prepare response*/
+public function send_message(){
 
     $jsonData = '{
     "recipient":{
         "id":"' . $this->sender_id . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$this->name.','.GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$this->sender_name.','.$this->message . '"
         }
     }';
+    
     /* curl setting to send a json post data */
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
