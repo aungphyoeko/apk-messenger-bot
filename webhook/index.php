@@ -18,8 +18,8 @@ class Messenger{
 
             $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
             $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
-            $name = get_name($surl);
-            send_message($sender,$url,$message,$name);    
+            $name = $this->get_name($surl);
+            $this->send_message($sender,$url,$message,$name);    
         }
     }
     public function verify_webhook(){
@@ -36,7 +36,7 @@ class Messenger{
     }
     /* receive and send messages */
 
-function get_name($surl){
+public function get_name($surl){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -47,7 +47,7 @@ function get_name($surl){
     curl_close($ch);
     return $obj["first_name"];
 }
-function send_message($sender,$url,$message = '',$name){
+public function send_message($sender,$url,$message = '',$name){
  /*initialize curl*/
     $ch = curl_init($url);
     /*prepare response*/
