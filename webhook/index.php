@@ -1,6 +1,6 @@
 <?php
 $messenger = new Messenger();
-return $messenger->verify_webhook();
+$messenger->verify_webhook();
 class Messenger{
     public function __construct(){
 
