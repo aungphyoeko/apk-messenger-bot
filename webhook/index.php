@@ -2,8 +2,24 @@
 $messenger = new Messenger();
 $messenger->verify_webhook();
 class Messenger{
+    protected $PAGE_ACCESS_TOKEN;
+    protected $input;
+    protected $message;
     public function __construct(){
+        $this->PAGE_ACCESS_TOKEN =getenv('PAGE_ACCESS_TOKEN');
+    }
+    public function listen_message(){
+        $input = json_decode(file_get_contents('php://input'), true);
+        if (isset($this->input['entry'][0]['messaging'][0]['sender']['id'])) {
 
+            $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
+            $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
+
+            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
+            $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
+            $name = get_name($surl);
+            send_message($sender,$url,$message,$name);    
+        }
     }
     public function verify_webhook(){
     /* validate verify token needed for setting up web hook */ 
@@ -17,25 +33,8 @@ class Messenger{
         }
     }
     }
-}
+    /* receive and send messages */
 
-
-
-$PAGE_ACCESS_TOKEN = getenv('PAGE_ACCESS_TOKEN');
-
-/* receive and send messages */
-$input = json_decode(file_get_contents('php://input'), true);
-if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
-
-    $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
-    $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
-
-    $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
-    $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
-    $name = get_name($surl);
-    send_message($sender,$url,$message,$name);
-    
-}
 function get_name($surl){
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -69,6 +68,9 @@ function send_message($sender,$url,$message = '',$name){
     }
     curl_close($ch);
 }
+
+}
+
 
 // Processing Messages To Reply
 $TEAM_DATA;
