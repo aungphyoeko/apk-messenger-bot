@@ -2,10 +2,13 @@
 $messenger = new Messenger();
 $messenger->verify_webhook();
 $messenger->listen_message();
+$messenger->get_name();
+$messenger->send_message();
 class Messenger{
     protected $PAGE_ACCESS_TOKEN;
-    protected $input;
     protected $message;
+    protected $sender_id;
+    protected $sender_name;
     public function __construct(){
         $this->PAGE_ACCESS_TOKEN =getenv('PAGE_ACCESS_TOKEN');
     }
@@ -13,12 +16,9 @@ class Messenger{
         $input = json_decode(file_get_contents('php://input'), true);
         if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
 
-            $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
-            $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
+            $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
+            $this->message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
 
-            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-            $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$this->PAGE_ACCESS_TOKEN";
-            $name = $this->get_name($surl);
             $this->send_message($sender,$url,$message,$name);    
         }
     }
@@ -36,28 +36,31 @@ class Messenger{
     }
     /* receive and send messages */
 
-public function get_name($surl){
+public function get_name(){
+    $url = "https://graph.facebook.com/v2.6/$this->sender_id?fields=first_name,last_name&access_token=$this->PAGE_ACCESS_TOKEN";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, $surl);
+    curl_setopt($ch, CURLOPT_URL, $url);
     $result = curl_exec($ch);
     curl_close($ch);
     $obj = json_decode($result,true);
     curl_close($ch);
-    return $obj["first_name"];
+    $this->sender_name = $obj["first_name"];
+    return $this->sender_name;
 }
-public function send_message($sender,$url,$message = '',$name){
+public function send_message($message = ''){
+    $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
  /*initialize curl*/
     $ch = curl_init($url);
     /*prepare response*/
 
     $jsonData = '{
     "recipient":{
-        "id":"' . $sender . '"
+        "id":"' . $this->sender_id . '"
         },
         "message":{
-            "text":"(Bot): Hi '.$name.','.GetResponseMessage($message ). '"
+            "text":"(Bot): Hi '.$this->name.','.GetResponseMessage($message ). '"
         }
     }';
     /* curl setting to send a json post data */
