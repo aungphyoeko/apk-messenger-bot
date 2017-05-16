@@ -56,10 +56,10 @@ class Messenger{
         }';
     }
     public function set_reply_message($data = ''){
-        if($data == '' && $this->sender_message != ''){
-            $this->i++;
+        if($data == ''){
+            $this->i ++;
             /* default message to reply what sender said*/
-            $data =  '(Bot): Hi '.$this->sender_name.$this->i.',you said, '.$this->sender_message;
+            $data =  '(Bot): Hi '.$this->i;
         }
         $this->reply_message = $data;
     }
