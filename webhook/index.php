@@ -34,9 +34,6 @@ class Messenger{
         }
     }
     public function process_reply_message(){
-        if($this->reply_message == ''){
-            $this->reply_message == $this->sender_message; // reply back 
-        }
         /*prepare response*/
         $this->reply_json = '{
         "recipient":{
@@ -48,6 +45,10 @@ class Messenger{
         }';
     }
     public function set_reply_message($data = ''){
+        if($data == ''){
+            $data = $this->sender_message;
+        }
+        $this->reply_message = $data;
     }
     public function listen_message(){
         $input = json_decode(file_get_contents('php://input'), true);
