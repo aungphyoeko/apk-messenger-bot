@@ -1,6 +1,7 @@
 {
 "team":{
 	"name":"Our Student Club",
+	"description":"Our Team Description",
 	"president":"president A",
 	"vice-president":"president B",
 	"members":[

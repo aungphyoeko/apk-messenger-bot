@@ -12,6 +12,11 @@ $messenger->set_reply_message();
 $messenger->encode_reply_message();
 $messenger->send_message();
 
+$messenger->set_reply_message("bla bla bla");
+$messenger->encode_reply_message();
+$messenger->send_message();
+
+
 /* Messenger class */
 class Messenger{
     protected $PAGE_ACCESS_TOKEN;
@@ -81,7 +86,7 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        if ($this->reply_message != ''){
+        if ($this->sender_message != ''){
             $result = $this->curl_send_post_request($url,$this->reply_json);
         }
     }
@@ -107,4 +112,44 @@ class Messenger{
     }
 }
 
+class Team{
+    protected $TEAM_DATA;
+    protected $team_info;
+    protected $team_members; 
+    public function __construct(){
+        $this->TEAM_DATA = array();
+        $this->team_info = array(
+            'name'=>'',
+            'description'=>''
+            );
+        $this->team_members = array(
+            array(
+                'name'=>'',
+                'position'=>''
+                )
+            );
+    }
+    public function read_data_file($filename){
+        $this->TEAM_DATA = json_decode( file_get_contents($filename));
+    }
+    public function set_team_info(){
+        $this->team_info['name'] = $this->TEAM_DATA['name'];
+        $this->team_info['description'] = $this->TEAM_DATA['description'];
+    }
+    public function get_team_info(){
+        return $this->team_info;
+    }
+    public function set_team_members(){
+        $this->team_members = array();
+        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['president'],'position'=>'President'));
+        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['vice-president'],'position'=>'Vice President'));
+        foreach($this->TEAM_DATA['team']['members'] as $member_name){
+            array_push($this->team_members, array('name'=> $member_name,'position'=>'Member'));
+        }
+    }
+    public function get_team_members(){
+        return $this->team_members;
+    }
+
+}
 ?>
