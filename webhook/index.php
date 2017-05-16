@@ -57,7 +57,7 @@ class Messenger{
     public function set_reply_message($data = ''){
         if($data == ''){
             /* default message to reply what sender said*/
-            $data =  '(Bot): Hi '.$this->sender_name.', you said,'.$this->sender_message;
+            $data =  $this->sender_message;
         }
         $this->reply_message = $data;
     }
