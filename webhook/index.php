@@ -60,16 +60,16 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        $this->curl_send_post_request($url,$this->reply_message);
+        if ($this->sender_message != ''){
+            $this->curl_send_post_request($url,$this->reply_message);
+        }
     }
     protected function curl_send_post_request($url,$data){
          $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->reply_message);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        if ($this->sender_message != ''){
             $result = curl_exec($ch); // user will get the message
-        }
         curl_close($ch);
     }
     protected function curl_send_get_request($url){
