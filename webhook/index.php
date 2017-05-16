@@ -1,6 +1,7 @@
 <?php
 $messenger = new Messenger();
 $messenger->verify_webhook();
+$messenger->listen_message();
 class Messenger{
     protected $PAGE_ACCESS_TOKEN;
     protected $input;
