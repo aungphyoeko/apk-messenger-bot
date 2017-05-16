@@ -3,7 +3,7 @@ $messenger = new Messenger();
 $messenger->verify_token('my_secure_verify_token');
 $messenger->listen_message();
 $messenger->set_reply_message();
-$messenger->process_reply_message();
+$messenger->encode_reply_message();
 $messenger->send_message();
 
 class Messenger{
@@ -33,7 +33,7 @@ class Messenger{
             }
         }
     }
-    public function process_reply_message(){
+    public function encode_reply_message(){
         /*prepare response*/
         $this->reply_json = '{
         "recipient":{
