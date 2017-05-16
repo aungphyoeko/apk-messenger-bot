@@ -11,7 +11,7 @@ class Messenger{
     }
     public function listen_message(){
         $input = json_decode(file_get_contents('php://input'), true);
-        if (isset($this->input['entry'][0]['messaging'][0]['sender']['id'])) {
+        if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
 
             $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
