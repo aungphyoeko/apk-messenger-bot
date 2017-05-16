@@ -16,8 +16,8 @@ class Messenger{
             $sender = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
 
-            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN";
-            $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$PAGE_ACCESS_TOKEN";
+            $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
+            $surl = "https://graph.facebook.com/v2.6/$sender?fields=first_name,last_name&access_token=$this->PAGE_ACCESS_TOKEN";
             $name = $this->get_name($surl);
             $this->send_message($sender,$url,$message,$name);    
         }
