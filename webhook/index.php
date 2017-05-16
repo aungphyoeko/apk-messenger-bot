@@ -22,6 +22,7 @@ $command = new Command($fbMessenger,$myTeam);
 $command->hear('GREETING',function(Messenger $fbMessenger,Team $myTeam){
     $message = $myTeam->get_greeting_message();
     $fbMessenger->set_reply_message($message);
+    $fbMessenger->encode_reply_message();
     $fbMessenger->send_message(); 
 });
 class Command{
@@ -40,6 +41,10 @@ class Command{
                 return $callback($this->fbMessenger,$this->myTeam);
             }
         }
+        $fbMessenger->set_reply_message();
+        $fbMessenger->encode_reply_message();
+        $fbMessenger->send_message();
+
         return;
     }
 }
