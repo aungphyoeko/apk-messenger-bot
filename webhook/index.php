@@ -24,25 +24,28 @@ class Command{
         $this->myTeam->read_data_file();
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
         $this->myTeam->read_data_file();
-        foreach($this->KEYWORDS as $command => $keyword){
-            switch($command){
-                case 'GREETING':
-                    in_array($hear,$keyword)?$this->command_greeting():false;
-                    break;
-                case 'BYE':
-                    in_array($hear,$keyword)?$this->command_bye():false;
-                    break;
-                case 'MEMBERS':
-                    in_array($hear,$keyword)?$this->command_members():false;
-                    break;
-                case 'MEETING':
-                    in_array($hear,$keyword)?$this->command_meeting():false;
-                    break;
-                case 'INFO':
-                    in_array($hear,$keyword)?$this->command_info():false;
-                    break;   
-                default:
-            }
+        foreach($this->KEYWORDS as $command=>$keywords){
+            if(in_array($hear,$keywords)) break;
+        }
+        switch($command){
+            case 'GREETING':
+                $this->command_greeting();
+                break;
+            case 'BYE':
+                $this->command_bye();
+                break;
+            case 'MEMBERS':
+                $this->command_members();
+                break;
+            case 'MEETING':
+                $this->command_meeting();
+                break;
+            case 'INFO':
+                $this->command_info();
+                break;   
+            default:
+                $this->fbMessenger->set_reply_message();
+                $this->fbMessenger->send_message(); 
         }
     }
     public function command_meeting(){
@@ -57,6 +60,10 @@ class Command{
     }
     public function command_greeting(){
         $this->fbMessenger->set_reply_message($this->myTeam->get_greeting_message());
+        $this->fbMessenger->send_message(); 
+    }
+    public function command_thank(){
+        $this->fbMessenger->set_reply_message($this->myTeam->get_thank_message());
         $this->fbMessenger->send_message(); 
     }
     public function command_bye(){
@@ -103,6 +110,9 @@ class Team{
     }
     public function get_greeting_message(){
         return $this->TEAM_DATA['messages']['greeting'];
+    }
+    public function get_thank_message(){
+        return $this->TEAM_DATA['messages']['thank'];
     }
     public function get_goodbye_message(){
          return $this->TEAM_DATA['messages']['bye'];

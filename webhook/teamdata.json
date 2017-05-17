@@ -34,6 +34,7 @@
 },
 "messages":{
 	"greeting":"Hi {name}, welcome to our club! What would you like to know about us? Team? members? projects? meetings?",
-	"bye":"Thank you {name}! See you again!"
+	"bye":"Thank you {name}! See you again!",
+	"thank":"You are welcome, {name}! Thanks for your ineterest."
 }
 }
