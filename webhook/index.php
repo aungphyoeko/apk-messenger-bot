@@ -1,7 +1,7 @@
 <?php
 /* create messenger instance */
 $fbMessenger = new Messenger();
-return $fbMessenger->verify_token('my_secure_verify_token');
+$fbMessenger->verify_token('my_secure_verify_token');
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
 $myTeam = new Team();
