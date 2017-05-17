@@ -11,6 +11,7 @@ if ($fbMessenger->listen_message() == ''){
 $myTeam = new Team();
 
 $command = new Command($fbMessenger,$myTeam);
+/**** COMMAND CLASS ****/
 class Command{
     protected $KEYWORDS;
     protected $fbMessenger;
@@ -34,11 +35,26 @@ class Command{
                 case 'MEMBERS':
                     in_array($hear,$keyword)?$this->command_members():false;
                     break;
+                case 'MEETING':
+                    in_array($hear,$keyword)?$this->command_meeting():false;
+                    break;
+                case 'INFO':
+                    in_array($hear,$keyword)?$this->command_info():false;
+                    break;   
                 default:
             }
         }
     }
-    
+    public function command_meeting(){
+        $message = $this->myTeam->get_team_meeting();
+        $this->fbMessenger->set_reply_message('There are meetings on every '.$message['day'].' at '.$message['time'].' in '.$message['location'].'.');
+        $this->fbMessenger->send_message(); 
+    }
+    public function command_info(){
+        $message = $this->myTeam->get_team_info();
+        $this->fbMessenger->set_reply_message('Our club name is '.$message['name'].'. Our club description is '. $message['description']);
+        $this->fbMessenger->send_message(); 
+    }
     public function command_greeting(){
         $this->fbMessenger->set_reply_message($this->myTeam->get_greeting_message());
         $this->fbMessenger->send_message(); 
@@ -48,8 +64,7 @@ class Command{
         $this->fbMessenger->send_message(); 
     }
     public function command_members(){
-        $this->myTeam->set_team_members();
-        $this->fbMessenger->set_reply_message('Our Team members are:');
+        $this->fbMessenger->set_reply_message('Our current active members are:');
         $this->fbMessenger->send_message(); 
         $count = 0;
         foreach($this->myTeam->get_team_members() as $position => $name){
@@ -68,32 +83,23 @@ class Command{
         }
     }
 }
-//**** TEAM CLASS ****/
+/**** TEAM CLASS ****/
 class Team{
     protected $TEAM_DATA;
-    protected $team_info;
-    protected $team_members; 
     public function __construct(){
         $this->TEAM_DATA = array();
-        $this->team_info = array();
-        $this->team_members = array();
     }
     public function read_data_file(){
         $this->TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
     }
-    public function set_team_members(){
-        $this->team_members = $this->TEAM_DATA['members'];
-    }
-    public function set_team_info(){
-        $this->team_info['name'] = $this->TEAM_DATA['name'];
-        $this->team_info['description'] = $this->TEAM_DATA['description'];
+    public function get_team_members(){
+        return $this->TEAM_DATA['members'];
     }
     public function get_team_info(){
-        return $this->team_info;
-    }
-    
-    public function get_team_members(){
-        return $this->team_members;
+        return $this->TEAM_DATA['info'];
+    }    
+    public function get_team_meeting(){
+        return $this->TEAM_DATA['meeting'];
     }
     public function get_greeting_message(){
         return $this->TEAM_DATA['messages']['greeting'];

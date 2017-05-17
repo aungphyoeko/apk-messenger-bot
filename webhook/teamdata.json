@@ -1,5 +1,5 @@
 {
-"team":{
+"info":{
 	"name":"Our Student Club",
 	"description":"Our Team Description"
 },
@@ -28,13 +28,12 @@
 	}
 },
 "meeting":{
-	"type":"Weekly",
 	"day":"Friday",
 	"time":"2pm - 5pm",
 	"location":"Our club metting room"
 },
 "messages":{
-	"greeting":"Hi {name}, welcome to our club! What would you like to know about us?",
+	"greeting":"Hi {name}, welcome to our club! What would you like to know about us? Team? members? projects? meetings?",
 	"bye":"Thank you {name}! See you again!"
 }
 }

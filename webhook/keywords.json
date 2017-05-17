@@ -5,5 +5,7 @@
 "BYE":["bye","good bye","see you", "see ya"],
 "YES":["yes","ype","yeah","ok","k","ya","of course","sure","kk","okay"],
 "NO":["No","Nope","Nah","Nan","Hell No","No way"],
-"MEMBERS":["members","member","who are you","who r u", "who r you"]
+"MEMBERS":["members","member","member list"],
+"INFO":["info","information","club","club information","club info","who are you","who r u", "who r you","name","club name","your name"],
+"MEETING":["meeting","meet","meetings","where do you meet"]
 }
