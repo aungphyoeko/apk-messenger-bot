@@ -178,35 +178,25 @@ class Messenger{
         $this->reply_json = '{
         "recipient":{
             "id":"' . $this->sender_id . '"
-            },';
+            }, "message":{';
         if(sizeof($this->buttons)>0){
-            $this->reply_json .=
-                '
-                "message":{
+            $this->reply_json .='
                     "attachment":{
                     "type":"template",
                     "payload":{
                         "template_type":"button",
                         "text":"What do you want to do next?",
-                        "buttons":[
-                        {
-                            "type":"web_url",
-                            "url":"https://petersapparel.parseapp.com",
-                            "title":"Show Website"
+                        "buttons":[';
+                        foreach($this->buttons as $button){
+                            $this->reply_json .= $button->get_template;
                         }
-                        ]
-                    }
-                    }
-                }   ';   
-            }
+                        ']}}';   
+        }
         else{
-        $this->reply_json .= '
-            "message":{
-                "text":" '.$this->reply_message.'"
-            }';
+            $this->reply_json .= '"text":" '.$this->reply_message.'"';
         }
         $this->reply_json .='
-        }';  
+        }}';  
         
     }
     public function set_reply_message($data = ''){
