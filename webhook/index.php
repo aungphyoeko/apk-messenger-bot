@@ -58,7 +58,9 @@ class Command{
     }
     public function command_website(){
         $message = $this->myTeam->get_team_info();
-        $this->fbMessenger->set_reply_message('Our website link is '.$message['website'].'.');
+        $button = new Button('web_url','Visit Our Website!','',$message['website']);
+        $this->fbMessenger->insert($button);
+        $this->fbMessenger->set_reply_message('Our website link is '.$message['website']);
         $this->fbMessenger->send_message(); 
 
     }
@@ -141,12 +143,14 @@ class Messenger{
     protected $sender_name;
     protected $reply_message;
     protected $reply_json;
+    protected $buttons;
 
     public function __construct(){
         $this->sender_message = '';
         $this->sender_id = 0;
         $this->sender_name = '';
         $this->reply_message = '';
+        $this->buttons = array();
     }
     public function verify_page_access($page_token){
         $this->PAGE_ACCESS_TOKEN = getenv($page_token);
@@ -164,16 +168,48 @@ class Messenger{
         }
         return false;
     }
+    public function insert($object){
+        if(get_class($object) == 'Button'){
+            array_push($object);
+        }
+    }
     public function encode_reply_message(){
         /*prepare response json */
-        $this->reply_json = '{
+        $json = '{
         "recipient":{
             "id":"' . $this->sender_id . '"
             },
             "message":{
-                "text":" '.$this->reply_message. '"
+                ';
+        if(sizeof($this->buttons)>0){
+            $json .= '"attachment":{
+                "type":"template",
+                "payload":{
+                    "template_type":"button",
+                    "text":"What do you want to do next?",
+                    "buttons":[
+                        {
+            "type":"web_url",
+            "url":"https://petersapparel.parseapp.com",
+            "title":"Show Website"
+          },
+          {
+            "type":"postback",
+            "title":"Start Chatting",
+            "payload":"USER_DEFINED_PAYLOAD"
+          }
+
+                    ]
+                }
+            }';
+        }
+        else{
+            $json .= '"text":" '.$this->reply_message. '"';
+        }
+        $json .= '
             }
         }';
+        $this->reply_json = $json;
     }
     public function set_reply_message($data = ''){
         if($data == '' && $this->sender_message != ''){
@@ -226,6 +262,29 @@ class Messenger{
         $obj = json_decode($result,true);
         curl_close($ch);
         return $obj;
+    }
+}
+/**** Button class ****/
+
+class Button{
+    protected $type;
+    protected $title;
+    protected $payload;
+    protected $url;
+    public function __construct($type = 'postback',$title = 'Button',$payload = 'PAYLOAD',$url = 'URL'){
+        $this->type = $type;
+        $this->title = $title;
+        $this->payload = $payload;
+        $this->url = $url;
+    }
+    public function get_template(){
+        switch ($this->type){
+            default:
+            case 'postback':
+                return '{"type":"postback","title":"'.$this->title.'","payload":"'.$this->payload.'"}';
+            case 'web_url':
+                return '{"type":"web_url","url":"'.$this->url.',"title":"'.$this->title.'""}';
+        }
     }
 }
 ?>
