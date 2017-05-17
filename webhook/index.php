@@ -9,7 +9,7 @@ $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
 
 $fbMessenger->listen_message();
-$fbMessenger->set_reply_message();
+$fbMessenger->set_reply_message($myTeam->get_greeting_message());
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
 
