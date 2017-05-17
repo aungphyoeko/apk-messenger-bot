@@ -1,10 +1,10 @@
 <?php
 /* create messenger instance */
 $fbMessenger = new Messenger();
-$myTeam = new Team();
-
-/* configure verification between bot and fb */
+return $fbMessenger->verify_token('my_secure_verify_token');
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
+
+$myTeam = new Team();
 
 $myTeam->read_data_file();
 $fbMessenger->listen_message();
@@ -141,6 +141,7 @@ class Messenger{
                 return;
             }
         }
+        return true;
     }
     public function encode_reply_message(){
         /*prepare response json */
