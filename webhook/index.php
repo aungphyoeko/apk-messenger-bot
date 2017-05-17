@@ -187,10 +187,13 @@ class Messenger{
                         "template_type":"button",
                         "text":"What do you want to do next?",
                         "buttons":[';
+                        $count = 0;
                         foreach($this->buttons as $button){
+                            if($count > 0){$this->reply_json .= ',';}
                             $this->reply_json .= $button->get_template;
+                            $count ++;
                         }
-                        ']}}';   
+                        $this->reply_json .= ']}}';   
         }
         else{
             $this->reply_json .= '"text":" '.$this->reply_message.'"';
