@@ -8,6 +8,7 @@ $fbMessenger->verify_token('my_secure_verify_token');
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
 
+$myTeam->read_data_file();
 $fbMessenger->listen_message();
 $fbMessenger->set_reply_message($myTeam->get_greeting_message());
 $fbMessenger->encode_reply_message();
