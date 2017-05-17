@@ -163,7 +163,7 @@ class Messenger{
     public function set_reply_message($data = ''){
         if($data == '' && $this->sender_message != ''){
             /* default message to reply what sender said*/
-            $data =  '(Bot): Hi '.$this->sender_name.',you said, '.$this->sender_message;
+            $data =  '(Bot): Hi '.$this->sender_name.', you said, '.$this->sender_message.'. But, I cannot process your command right now because I need to be fully developed. Sorry!';
         }
         $data = preg_replace('/\{name\}/',$this->sender_name,$data);
         $this->reply_message = $data;
