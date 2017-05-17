@@ -187,7 +187,11 @@ class Messenger{
                         "template_type":"button",
                         "text":"What do you want to do next?",
                         "buttons":[';
-            $this->reply_json .= '{"type":"web_url","url":"https://sjccrobotics.com/","title":"Visit Our Website!}';
+            $this->reply_json .= '{
+            "type":"web_url",
+            "url":"https://petersapparel.parseapp.com",
+            "title":"Show Website"
+          }';
             $this->reply_json .= ']}}';   
         }
         else{
@@ -269,7 +273,7 @@ class Button{
             case 'postback':
                 return '{"type":"postback","title":"'.$this->title.'","payload":"'.$this->payload.'"}';
             case 'web_url':
-                return '{"type":"web_url","url":"'.$this->url.'","title":"'.$this->title.'""}';
+                return '{"type":"web_url","url":"'.$this->url.'","title":"'.$this->title.'"}';
         }
     }
 }
