@@ -170,17 +170,23 @@ class Messenger{
     }
     public function insert($object){
         if(get_class($object) == 'Button'){
-            array_push($object);
+            array_push($this->buttons,$object);
         }
     }
     public function encode_reply_message(){
         /*prepare response json */
-        $json = 
         $this->reply_json = '{
         "recipient":{
             "id":"' . $this->sender_id . '"
             },
-              "message":{
+            "message":{
+                "text":" '.$this->reply_message.'"
+            }
+        }';  
+        if(sizeof($this->buttons)>0){
+            $this->reply_json =
+'
+  "message":{
     "attachment":{
       "type":"template",
       "payload":{
@@ -191,18 +197,12 @@ class Messenger{
             "type":"web_url",
             "url":"https://petersapparel.parseapp.com",
             "title":"Show Website"
-          },
-          {
-            "type":"postback",
-            "title":"Start Chatting",
-            "payload":"USER_DEFINED_PAYLOAD"
           }
         ]
       }
     }
-  }
-
-        }';
+  }   ';   
+        }
     }
     public function set_reply_message($data = ''){
         if($data == '' && $this->sender_message != ''){
