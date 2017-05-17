@@ -9,8 +9,6 @@ if ($fbMessenger->listen_message() == ''){
 }
 
 $myTeam = new Team();
-$myTeam->read_data_file();
-
 
 $command = new Command($fbMessenger,$myTeam);
 class Command{
@@ -22,6 +20,8 @@ class Command{
         if($hear == '') return;
         $this->fbMessenger = $fbMessenger;
         $this->myTeam = $myTeam;
+        $this->myTeam->read_data_file();
+
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
         $this->myTeam->read_data_file();
         foreach($this->KEYWORDS as $command => $keyword){
