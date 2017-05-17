@@ -273,7 +273,11 @@ class Button{
             case 'postback':
                 return '{"type":"postback","title":"'.$this->title.'","payload":"'.$this->payload.'"}';
             case 'web_url':
-                return '{"type":"web_url","url":"'.$this->url.'","title":"'.$this->title.'"}';
+                return '{
+            "type":"web_url",
+            "url":"'.$this->url.'",
+            "title":"'.$this->title.'"
+          }';
         }
     }
 }
