@@ -187,11 +187,7 @@ class Messenger{
                         "template_type":"button",
                         "text":"What do you want to do next?",
                         "buttons":[';
-            $this->reply_json .= '{
-            "type":"web_url",
-            "url":"https://petersapparel.parseapp.com",
-            "title":"Show Website"
-          }';
+            $this->reply_json .= $this->buttons[0]->get_template();
             $this->reply_json .= ']}}';   
         }
         else{
