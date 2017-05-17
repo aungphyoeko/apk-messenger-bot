@@ -55,15 +55,14 @@ class Command{
         foreach($this->myTeam->get_team_members() as $position => $name){
             $count ++;
             if(is_array($name)){
-                $this->fbMessenger->send_message();
                 foreach ($name as $each){
-                    $this->fbMessenger->set_reply_message($count.' '.$each);
+                    $this->fbMessenger->set_reply_message($count.'. '.$each);
                     $this->fbMessenger->send_message(); 
                     $count++;
                 }
             }
             else{
-                $this->fbMessenger->set_reply_message($count.' '.$position.' : '.$name);
+                $this->fbMessenger->set_reply_message($count.'. '.$position.' : '.$name);
                 $this->fbMessenger->send_message(); 
             }
         }
