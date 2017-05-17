@@ -47,11 +47,20 @@ class Command{
                 break; 
             case 'THANK':
                 $this->command_thank();
-                break;   
+                break;
+            case 'WEBSITE':
+                $this->command_website();
+                break;
             default:
                 $this->fbMessenger->set_reply_message();
                 $this->fbMessenger->send_message(); 
         }
+    }
+    public function command_website(){
+        $message = $this->myTeam->get_team_info();
+        $this->fbMessenger->set_reply_message('Our website link is '.$message['website'].'.');
+        $this->fbMessenger->send_message(); 
+
     }
     public function command_meeting(){
         $message = $this->myTeam->get_team_meeting();

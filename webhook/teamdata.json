@@ -1,7 +1,8 @@
 {
 "info":{
 	"name":"Our Student Club",
-	"description":"Our Team Description"
+	"description":"Our Team Description",
+	"website":"https://sjccrobotics.com/"
 },
 "members":{
 	"president":"president A",
