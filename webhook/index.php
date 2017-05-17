@@ -187,7 +187,7 @@ class Messenger{
                         "template_type":"button",
                         "text":"What do you want to do next?",
                         "buttons":[';
-            $this->reply_json .= '{"type":"web_url","url":"https://sjccrobotics.com/","title":"Visit Our Website!""}';
+            $this->reply_json .= '{"type":"web_url","url":"https://sjccrobotics.com/","title":"Visit Our Website!}';
             $this->reply_json .= ']}}';   
         }
         else{
