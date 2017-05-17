@@ -41,31 +41,28 @@ class Command{
     
     public function command_greeting(){
         $this->fbMessenger->set_reply_message($this->myTeam->get_greeting_message());
+        $this->fbMessenger->encode_reply_message();
         $this->fbMessenger->send_message(); 
     }
     public function command_bye(){
         $this->fbMessenger->set_reply_message($this->myTeam->get_goodbye_message());
+        $this->fbMessenger->encode_reply_message();
         $this->fbMessenger->send_message(); 
     }
     public function command_members(){
         $this->myTeam->set_team_members();
         $this->fbMessenger->set_reply_message('Our Team members are:');
+        $this->fbMessenger->encode_reply_message();
         $this->fbMessenger->send_message(); 
-        $count = 0;
-        foreach($this->myTeam->get_team_members() as $position => $name){
-            $count ++;
-            if(is_array($name)){
-                $this->fbMessenger->send_message();
-                foreach ($name as $each){
-                    $this->fbMessenger->set_reply_message($count.' '.$each);
-                    $this->fbMessenger->send_message(); 
-                    $count++;
-                }
-            }
-            else{
-                $this->fbMessenger->set_reply_message($count.' '.$position.' : '.$name);
-                $this->fbMessenger->send_message(); 
-            }
+        foreach($this->myTeam->get_team_members() as $member){
+            $message = 'Name : '.$member['name'];
+            $this->fbMessenger->set_reply_message($message);
+            $this->fbMessenger->encode_reply_message();
+            $this->fbMessenger->send_message(); 
+            $message = 'Position : '.$member['position'];
+            $this->fbMessenger->set_reply_message($message);
+            $this->fbMessenger->encode_reply_message();
+            $this->fbMessenger->send_message(); 
         }
     }
 }
@@ -76,14 +73,27 @@ class Team{
     protected $team_members; 
     public function __construct(){
         $this->TEAM_DATA = array();
-        $this->team_info = array();
-        $this->team_members = array();
+        $this->team_info = array(
+            'name'=>'',
+            'description'=>''
+            );
+        $this->team_members = array(
+            array(
+                'name'=>'',
+                'position'=>''
+                )
+            );
     }
     public function read_data_file(){
-        $this->TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
+        $this->TEAM_DATA = json_decode( file_get_contents('teamdata.json'),true);
     }
     public function set_team_members(){
-        $this->team_members = $this->TEAM_DATA['members'];
+        $this->team_members = array();
+        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['president'],'position'=>'President'));
+        array_push($this->team_members, array('name'=> $this->TEAM_DATA['team']['vice-president'],'position'=>'Vice President'));
+        foreach($this->TEAM_DATA['team']['members'] as $member_name){
+            array_push($this->team_members, array('name'=> $member_name,'position'=>'Member'));
+        }
     }
     public function set_team_info(){
         $this->team_info['name'] = $this->TEAM_DATA['name'];
