@@ -25,6 +25,7 @@ class Command{
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
         $this->myTeam->read_data_file();
         foreach($this->KEYWORDS as $command=>$keywords){
+            $matches = preg_grep('/'.strtolower($hear).'/',$keywords);
             if(in_array($hear,$keywords)) break;
         }
         switch($command){
@@ -42,6 +43,9 @@ class Command{
                 break;
             case 'INFO':
                 $this->command_info();
+                break; 
+            case 'THANK':
+                $this->command_thank();
                 break;   
             default:
                 $this->fbMessenger->set_reply_message();
@@ -58,12 +62,13 @@ class Command{
         $this->fbMessenger->set_reply_message('Our club name is '.$message['name'].'. Our club description is '. $message['description']);
         $this->fbMessenger->send_message(); 
     }
-    public function command_greeting(){
-        $this->fbMessenger->set_reply_message($this->myTeam->get_greeting_message());
-        $this->fbMessenger->send_message(); 
-    }
     public function command_thank(){
         $this->fbMessenger->set_reply_message($this->myTeam->get_thank_message());
+        $this->fbMessenger->send_message(); 
+
+    }
+    public function command_greeting(){
+        $this->fbMessenger->set_reply_message($this->myTeam->get_greeting_message());
         $this->fbMessenger->send_message(); 
     }
     public function command_bye(){
