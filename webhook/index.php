@@ -169,6 +169,7 @@ class Messenger{
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
             $this->sender_name = $this->request_sender_name();
             $this->reply_message = '';
+            if ($this->sender_message == '') exit();
             return $this->sender_message;
         }
         $this->sender_message = '';
@@ -183,9 +184,7 @@ class Messenger{
 
     public function send_message(){
         $url = "https://graph.facebook.com/v2.6/me/messages?access_token=$this->PAGE_ACCESS_TOKEN";
-        if ($this->sender_message != ''){
-            $result = $this->curl_send_post_request($url,$this->reply_json);
-        }
+        $result = $this->curl_send_post_request($url,$this->reply_json);
     }
     protected function curl_send_post_request($url,$data){
         $ch = curl_init($url);
