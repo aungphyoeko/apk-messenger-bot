@@ -27,6 +27,7 @@ class Command{
         foreach($this->KEYWORDS as $command=>$keywords){
             $matches = preg_grep('/'.strtolower($hear).'/',$keywords);
             if(in_array($hear,$keywords)) break;
+            $command = '';
         }
         switch($command){
             case 'GREETING':
