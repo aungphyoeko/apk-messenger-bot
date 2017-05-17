@@ -7,7 +7,10 @@ $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 $myTeam = new Team();
 
 $myTeam->read_data_file();
-$fbMessenger->listen_message();
+if ($fbMessenger->listen_message() == ''){
+    return;
+}
+
 $fbMessenger->set_reply_message($myTeam->get_greeting_message());
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
@@ -169,7 +172,6 @@ class Messenger{
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
             $this->sender_name = $this->request_sender_name();
             $this->reply_message = '';
-            if ($this->sender_message == '') exit();
             return $this->sender_message;
         }
         $this->sender_message = '';
