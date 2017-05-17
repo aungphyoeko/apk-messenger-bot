@@ -15,7 +15,7 @@ $fbMessenger->set_reply_message($myTeam->get_greeting_message());
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
 
-
+$command = new Command($fbMessenger,$myTeam);
 class Command{
     protected $KEYWORDS;
     protected $fbMessenger;
