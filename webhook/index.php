@@ -7,12 +7,12 @@ $myTeam = new Team();
 $fbMessenger->verify_token('my_secure_verify_token');
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
-/* Testing conversation
+
 $fbMessenger->listen_message();
 $fbMessenger->set_reply_message();
 $fbMessenger->encode_reply_message();
 $fbMessenger->send_message();
-*/
+
 $command = new Command($fbMessenger,$myTeam);
 
 class Command{
@@ -20,11 +20,11 @@ class Command{
     protected $fbMessenger;
     protected $myTeam;
     public function __construct($fbMessenger,$myTeam){
+        $hear = $fbMessenger->listen_message();
+        if($hear == '') return;
         $this->fbMessenger = $fbMessenger;
         $this->myTeam = $myTeam;
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
-        $hear = $fbMessenger->listen_message();
-        if($hear == '') return;
         $this->myTeam->read_data_file();
         foreach($this->KEYWORDS as $command => $keyword){
             switch($command){
