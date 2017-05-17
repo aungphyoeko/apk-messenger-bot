@@ -1,15 +1,15 @@
 <?php
 /* create messenger instance */
 $fbMessenger = new Messenger();
-$fbMessenger->verify_token('my_secure_verify_token');
+if($fbMessenger->verify_token('my_secure_verify_token')) return;
 $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 
-$myTeam = new Team();
-
-$myTeam->read_data_file();
 if ($fbMessenger->listen_message() == ''){
     return;
 }
+
+$myTeam = new Team();
+$myTeam->read_data_file();
 
 $fbMessenger->set_reply_message($myTeam->get_greeting_message());
 $fbMessenger->encode_reply_message();
@@ -138,13 +138,13 @@ class Messenger{
         if (isset($_GET['hub_verify_token'])) { 
             if ($_GET['hub_verify_token'] === $my_token) {
                 echo $_GET['hub_challenge'];
-                return;
+                return true;
             } else {
                 echo 'Invalid Verify Token';
-                return;
+                return true;
             }
         }
-        return true;
+        return false;
     }
     public function encode_reply_message(){
         /*prepare response json */
