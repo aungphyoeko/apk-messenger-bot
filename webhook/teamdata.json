@@ -1,10 +1,12 @@
 {
 "team":{
 	"name":"Our Student Club",
-	"description":"Our Team Description",
+	"description":"Our Team Description"
+},
+"members":{
 	"president":"president A",
 	"vice-president":"president B",
-	"members":[
+	"others":[
 		"member A",
 		"member B",
 		"member C",
