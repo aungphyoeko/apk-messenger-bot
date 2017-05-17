@@ -175,20 +175,19 @@ class Messenger{
     }
     public function encode_reply_message(){
         /*prepare response json */
-        $json = '{
+        $json = 
+        $this->reply_json = '{
         "recipient":{
             "id":"' . $this->sender_id . '"
             },
-            "message":{
-                ';
-        if(sizeof($this->buttons)>0){
-            $json .= '"attachment":{
-                "type":"template",
-                "payload":{
-                    "template_type":"button",
-                    "text":"What do you want to do next?",
-                    "buttons":[
-                        {
+              "message":{
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"What do you want to do next?",
+        "buttons":[
+          {
             "type":"web_url",
             "url":"https://petersapparel.parseapp.com",
             "title":"Show Website"
@@ -198,18 +197,12 @@ class Messenger{
             "title":"Start Chatting",
             "payload":"USER_DEFINED_PAYLOAD"
           }
+        ]
+      }
+    }
+  }
 
-                    ]
-                }
-            }';
-        }
-        else{
-            $json .= '"text":" '.$this->reply_message. '"';
-        }
-        $json .= '
-            }
         }';
-        $this->reply_json = $json;
     }
     public function set_reply_message($data = ''){
         if($data == '' && $this->sender_message != ''){
