@@ -11,9 +11,6 @@ if ($fbMessenger->listen_message() == ''){
 $myTeam = new Team();
 $myTeam->read_data_file();
 
-$fbMessenger->set_reply_message($myTeam->get_greeting_message());
-$fbMessenger->encode_reply_message();
-$fbMessenger->send_message();
 
 $command = new Command($fbMessenger,$myTeam);
 class Command{
@@ -46,24 +43,29 @@ class Command{
     public function command_greeting(){
         $message = $this->myTeam->get_greeting_message();
         $this->fbMessenger->set_reply_message($message);
+        $fbMessenger->encode_reply_message();
         $this->fbMessenger->send_message(); 
     }
     public function command_bye(){
         $message = $this->myTeam->get_goodbye_message();
         $this->fbMessenger->set_reply_message($message);
+        $fbMessenger->encode_reply_message();
         $this->fbMessenger->send_message(); 
     }
     public function command_members(){
         $this->myTeam->set_team_members();
         $message='Our Team members are:';
         $this->fbMessenger->set_reply_message($message);
+        $fbMessenger->encode_reply_message();
         $this->fbMessenger->send_message(); 
         foreach($this->myTeam->get_team_members() as $member){
             $message = 'Name : '.$member['name'];
             $this->fbMessenger->set_reply_message($message);
+            $fbMessenger->encode_reply_message();
             $this->fbMessenger->send_message(); 
             $message = 'Position : '.$member['position'];
             $this->fbMessenger->set_reply_message($message);
+            $fbMessenger->encode_reply_message();
             $this->fbMessenger->send_message(); 
         }
     }
