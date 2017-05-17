@@ -33,7 +33,7 @@
 	"location":"Our club metting room"
 },
 "messages":{
-	"greeting":"Hi {name}, welcome to our club! \nWhat would you like to know about us? \nTeam? members? projects? meetings?",
+	"greeting":"Hi {name}, welcome to our club! What would you like to know about us? Team? members? projects? meetings?",
 	"bye":"Thank you {name}! See you again!"
 }
 }
