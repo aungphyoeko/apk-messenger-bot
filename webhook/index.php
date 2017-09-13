@@ -58,7 +58,7 @@ class Command{
     }
     public function command_website(){
         $message = $this->myTeam->get_team_info();
-        $button = new Button('web_url','Visit Our Website!','',$message['website']);
+        $button = new Button('template','web_url','Visit Our Website!','',$message['website']);
         $this->fbMessenger->insert($button);
         $this->fbMessenger->set_reply_message('Our website link is '.$message['website']);
         $this->fbMessenger->send_message(); 
@@ -265,7 +265,9 @@ class Button{
     }
     public function get_template(){
         switch ($this->template_type){
-
+            default:
+            case 'template':
+            return;
         }
     }
     public function get_button(){
