@@ -184,13 +184,18 @@ class Messenger{
             }, "message":{';
         if(sizeof($this->buttons)>0){
             $this->reply_json .='
-                    "attachment":{
-                    "type":"template",
-                    "payload":{
-                        "template_type":"button",
-                        "text":"What do you want to do next?",
-                        "buttons":[';
-            $this->reply_json .= $this->buttons[0]->get_button();
+            "attachment":{
+                "type":"template",
+                "payload":{
+                  "template_type":"button",
+                  "text":"What do you want to do next?",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url":"https://www.messenger.com",
+                      "title":"Visit Messenger"
+                    }';
+ 
             $this->reply_json .= ']}}';   
         }
         else{

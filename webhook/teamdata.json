@@ -2,7 +2,8 @@
 "info":{
 	"name":"Our Student Club",
 	"description":"Our Team Description",
-	"website":"https://sjccrobotics.com/"
+	"website":"https://sjccrobotics.com/",
+	"image":"https://sjccrobotics.com/css/images/current_banner_opt.jpg"
 },
 "members":{
 	"president":"president A",
@@ -34,7 +35,7 @@
 	"location":"Our club metting room"
 },
 "messages":{
-	"greeting":"Hi {name}, welcome to our club! What would you like to know about us? Team? members? projects? meetings?",
+	"greeting":"Hi {name}, welcome to our club! What would you like to know about us?",
 	"bye":"Thank you {name}! See you again!",
 	"thank":"You are welcome, {name}! Thanks for your ineterest."
 }
