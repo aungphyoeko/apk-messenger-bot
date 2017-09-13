@@ -29,6 +29,7 @@ class Command{
                 $matches = preg_match_all('/\b('.$keyword.')\b/',strtolower($hear)); 
                 if($matches > 0) break;  
             }
+            if($matches > 0) break;
             $command = '';
         }
         switch($command){
