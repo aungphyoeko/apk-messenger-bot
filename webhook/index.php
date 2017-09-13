@@ -187,7 +187,7 @@ class Messenger{
                         "template_type":"button",
                         "text":"What do you want to do next?",
                         "buttons":[';
-            $this->reply_json .= $this->buttons[0]->get_template();
+            $this->reply_json .= $this->buttons[0]->get_button();
             $this->reply_json .= ']}}';   
         }
         else{
@@ -257,13 +257,18 @@ class Button{
     protected $title;
     protected $payload;
     protected $url;
-    public function __construct($type = 'postback',$title = 'Button',$payload = 'PAYLOAD',$url = 'URL'){
+    public function __construct($template_type = 'template',$type = 'postback',$title = 'Button',$payload = 'PAYLOAD',$url = 'URL'){
         $this->type = $type;
         $this->title = $title;
         $this->payload = $payload;
         $this->url = $url;
     }
     public function get_template(){
+        switch ($this->template_type){
+
+        }
+    }
+    public function get_button(){
         switch ($this->type){
             default:
             case 'postback':
