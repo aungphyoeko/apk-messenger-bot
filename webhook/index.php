@@ -25,8 +25,10 @@ class Command{
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
         $this->myTeam->read_data_file();
         foreach($this->KEYWORDS as $command=>$keywords){
-            $matches = preg_match_all('/\b('.$keywords.')\b/',strtolower($hear));
-            if($matches > 0) break;
+            foreach ($keywords as $keyword){
+                $matches = preg_match_all('/\b('.$keyword.')\b/',strtolower($hear)); 
+                if($matches > 0) break;  
+            }
             $command = '';
         }
         switch($command){
