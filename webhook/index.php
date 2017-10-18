@@ -20,6 +20,12 @@ class Command{
         $hear = $fbMessenger->listen_message();
         if($hear == '') return;
         $this->fbMessenger = $fbMessenger;
+        switch($hear){
+            case 'button':
+            default:
+
+        }
+        /*
         $this->myTeam = $myTeam;
         $this->myTeam->read_data_file();
         $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
@@ -55,48 +61,44 @@ class Command{
                 $this->command_website();
                 break;
             default:
-                $this->fbMessenger->set_reply_message();
+                $this->fbMessenger->set_reply_data();
                 $this->fbMessenger->send_message(); 
-        }
+        } */
     }
     public function command_website(){
         $message = $this->myTeam->get_team_info();
-        $button = new Button('template','web_url','Visit Our Website!','',$message['website']);
-        $this->fbMessenger->insert($button);
-        $this->fbMessenger->set_reply_message('Our website link is '.$message['website']);
         $this->fbMessenger->send_message(); 
-
     }
     public function command_meeting(){
         $message = $this->myTeam->get_team_meeting();
-        $this->fbMessenger->set_reply_message('There are meetings on every '.$message['day'].' at '.$message['time'].' in '.$message['location'].'.');
+        $this->fbMessenger->set_reply_data('There are meetings on every '.$message['day'].' at '.$message['time'].' in '.$message['location'].'.');
         $this->fbMessenger->send_message(); 
     }
     public function command_info(){
         $message = $this->myTeam->get_team_info();
-        $this->fbMessenger->set_reply_message('Our club name is '.$message['name'].'. Our club description is '. $message['description']);
+        $this->fbMessenger->set_reply_data('Our club name is '.$message['name'].'. Our club description is '. $message['description']);
         $this->fbMessenger->send_message(); 
     }
     public function command_thank(){
-        $this->fbMessenger->set_reply_message($this->myTeam->get_thank_message());
+        $this->fbMessenger->set_reply_data($this->myTeam->get_thank_message());
         $this->fbMessenger->send_message(); 
 
     }
     public function command_greeting(){
-        $this->fbMessenger->set_reply_message($this->myTeam->get_greeting_message());
+        $this->fbMessenger->set_reply_data($this->myTeam->get_greeting_message());
         $this->fbMessenger->send_message(); 
     }
     public function command_bye(){
-        $this->fbMessenger->set_reply_message($this->myTeam->get_goodbye_message());
+        $this->fbMessenger->set_reply_data($this->myTeam->get_goodbye_message());
         $this->fbMessenger->send_message(); 
     }
     public function command_board_members(){
-        $this->fbMessenger->set_reply_message('Our current board members are:');
+        $this->fbMessenger->set_reply_data('Our current board members are:');
         $this->fbMessenger->send_message(); 
         $count = 0;
         foreach($this->myTeam->get_team_members() as $position => $name){
             $count ++;
-            $this->fbMessenger->set_reply_message($count.'. '.$position.' : '.$name);
+            $this->fbMessenger->set_reply_data($count.'. '.$position.' : '.$name);
             $this->fbMessenger->send_message(); 
         }
     }
@@ -134,16 +136,14 @@ class Messenger{
     protected $sender_message;
     protected $sender_id;
     protected $sender_name;
-    protected $reply_message;
+    protected $reply_data;
     protected $reply_json;
-    protected $buttons;
 
     public function __construct(){
         $this->sender_message = '';
         $this->sender_id = 0;
         $this->sender_name = '';
-        $this->reply_message = '';
-        $this->buttons = array();
+        $this->reply_data = new Text('Hello');
     }
     public function verify_page_access($page_token){
         $this->PAGE_ACCESS_TOKEN = getenv($page_token);
@@ -161,41 +161,36 @@ class Messenger{
         }
         return false;
     }
-    public function insert($object){
-        if(get_class($object) == 'Button'){
-            array_push($this->buttons,$object);
-        }
-    }
     public function encode_reply_message(){
         /*prepare response json */
         $this->reply_json = '{
             "recipient":{
                 "id":"'.$this->sender_id.'"},';
         $this->reply_json .= '
-            "message":{
-                "text":"hello, world!"                
-            }';  
+            "message":{';
+        if(get_class($this->reply_data) == 'Text'){
+            $this->reply_json .= $this->reply_data->get_text();
+        }
+        $this->reply_json .= '}';  
         $this->reply_json .='}';
     }
-    public function set_reply_message($data = ''){
-        if($data == '' && $this->sender_message != ''){
-            /* default message to reply what sender said*/
-            $data =  '(Bot): Hi '.$this->sender_name.', you said, '.$this->sender_message.'. But, I cannot process your command right now because I need to be fully developed. Sorry!';
-        }
+    /* 
+    public function set_reply_data($data = ''){
         $data = preg_replace('/\{name\}/',$this->sender_name,$data);
-        $this->reply_message = $data;
-    }
+        $this->reply_data = $data;
+    } */
+
     public function listen_message(){
         $input = json_decode(file_get_contents('php://input'), true);
         if (isset($input['entry'][0]['messaging'][0]['sender']['id'])) {
             $this->sender_id = $input['entry'][0]['messaging'][0]['sender']['id']; //sender facebook id
             $this->sender_message = $input['entry'][0]['messaging'][0]['message']['text']; //text that user sent
             $this->sender_name = $this->request_sender_name();
-            $this->reply_message = '';
+            $this->reply_data = '';
             return $this->sender_message;
         }
         $this->sender_message = '';
-        $this->reply_message = '';
+        $this->reply_data = '';
         return '';
     }
     protected function request_sender_name(){
@@ -230,38 +225,19 @@ class Messenger{
         return $obj;
     }
 }
-/**** Button class ****/
-
-class Button{
-    protected $type;
-    protected $title;
-    protected $payload;
-    protected $url;
-    public function __construct($template_type = 'template',$type = 'postback',$title = 'Button',$payload = 'PAYLOAD',$url = 'URL'){
-        $this->type = $type;
-        $this->title = $title;
-        $this->payload = $payload;
-        $this->url = $url;
+class Text{
+    protected $message;
+    public function __construct($msg =''){
+        $this->message = '"text": "'.$msg.'"';
     }
-    public function get_template(){
-        switch ($this->template_type){
-            default:
-            case 'template':
-            return;
-        }
+    public function set_message($msg){
+        $this->message = '"text": "'.$msg.'"';
     }
-    public function get_button(){
-        switch ($this->type){
-            default:
-            case 'postback':
-                return '{"type":"postback","title":"'.$this->title.'","payload":"'.$this->payload.'"}';
-            case 'web_url':
-                return '{
-            "type":"web_url",
-            "url":"'.$this->url.'",
-            "title":"'.$this->title.'"
-          }';
-        }
+    public function join_new_message($msg){
+        $this->message .= $msg;
+    }
+    public function get_text(){
+        return $this->message;
     }
 }
 ?>
