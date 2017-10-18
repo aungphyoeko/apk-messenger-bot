@@ -180,19 +180,19 @@ class Messenger{
                     "elements":[
                        {
                         "title":"Welcome to Peter\'s Hats",
-                        "image_url":"https://petersfancybrownhats.com/company_image.png",
+                        "image_url":"https://sjccrobotics.com/css/images/current_banner_opt.jpg",
                         "subtitle":"We\'ve got the right hat for everyone.",
                         "default_action": {
                           "type": "web_url",
-                          "url": "https://peterssendreceiveapp.ngrok.io/view?item=103",
+                          "url": "https://sjccrobotics.com/",
                           "messenger_extensions": true,
                           "webview_height_ratio": "tall",
-                          "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                          "fallback_url": "https://sjccrobotics.com/"
                         },
                         "buttons":[
                           {
                             "type":"web_url",
-                            "url":"https://petersfancybrownhats.com",
+                            "url":"https://sjccrobotics.com/",
                             "title":"View Website"
                           },{
                             "type":"postback",
