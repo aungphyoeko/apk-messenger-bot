@@ -7,18 +7,10 @@ $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 if ($fbMessenger->listen_message() == ''){
     return;
 }
-$command = new Command($fbMessenger);
-/**** COMMAND CLASS ****/
-class Command {
-    protected $fbMessenger;
-    protected $myTeam;
-    public function __construct($fbMessenger){
-        $hear = $fbMessenger->listen_message();
-        if($hear == '') return;
-        $this->fbMessenger = $fbMessenger;
-        $this->fbMessenger->set_reply_data($hear);
-    }
-}
+$hear = $fbMessenger->listen_message();
+$fbMessenger->set_reply_data($hear);
+$fbMessenger->encode_reply_message();
+$fbMessenger->send_message();
 /* Messenger class */
 class Messenger {
     protected $PAGE_ACCESS_TOKEN;
