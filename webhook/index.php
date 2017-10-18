@@ -169,65 +169,41 @@ class Messenger{
     public function encode_reply_message(){
         /*prepare response json */
         $this->reply_json = '{
-        "recipient":{
-            "id":"' . $this->sender_id . '"
-            }, "message":{';
-                if(sizeof($this->buttons)>0){
-                    $this->reply_json .='
-                    "attachment":{
-                        "type":"template",
-                        "payload":{
-                            "template_type":"button",
-                            "text":"What do you want to do next?",
-                            "buttons":[
-                                {
-                                    "type":"web_url",
-                                    "url":"https://www.messenger.com",
-                                    "title":"Visit Messenger"
-                                }';
- 
-                    $this->reply_json .= ']}}';   
-                }
-                   
-                else{
-                    //$this->reply_json .= '"text":" '.$this->reply_message.'"';
-                    $this->reply_json .='
-                    "attachment":{
-                        "type":"template",
-                        "payload":{
-                          "template_type":"generic",
-                          "elements":[
-                             {
-                              "title":"Welcome to Peter\'s Hats",
-                              "image_url":"https://petersfancybrownhats.com/company_image.png",
-                              "subtitle":"We\'ve got the right hat for everyone.",
-                              "default_action": {
-                                "type": "web_url",
-                                "url": "https://peterssendreceiveapp.ngrok.io/view?item=103",
-                                "messenger_extensions": true,
-                                "webview_height_ratio": "tall",
-                                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
-                              },
-                              "buttons":[
-                                {
-                                  "type":"web_url",
-                                  "url":"https://petersfancybrownhats.com",
-                                  "title":"View Website"
-                                },{
-                                  "type":"postback",
-                                  "title":"Start Chatting",
-                                  "payload":"DEVELOPER_DEFINED_PAYLOAD"
-                                }              
-                              ]      
-                            }
-                          ]
-                        }
-                    }
-';
-                
-                }
-            $this->reply_json .='
-        }}';  
+            "recipient":{
+                "id":"'.$this->sender_id.'"
+            },
+            "message":{
+                "attachment":{
+                  "type":"template",
+                  "payload":{
+                    "template_type":"generic",
+                    "elements":[
+                       {
+                        "title":"Welcome to Peter\'s Hats",
+                        "image_url":"https://petersfancybrownhats.com/company_image.png",
+                        "subtitle":"We\'ve got the right hat for everyone.",
+                        "default_action": {
+                          "type": "web_url",
+                          "url": "https://peterssendreceiveapp.ngrok.io/view?item=103",
+                          "messenger_extensions": true,
+                          "webview_height_ratio": "tall",
+                          "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                        },
+                        "buttons":[
+                          {
+                            "type":"web_url",
+                            "url":"https://petersfancybrownhats.com",
+                            "title":"View Website"
+                          },{
+                            "type":"postback",
+                            "title":"Start Chatting",
+                            "payload":"DEVELOPER_DEFINED_PAYLOAD"
+                          }              
+                        ]      
+                      }
+                    ]
+                  }
+        }'
         
     }
     public function set_reply_message($data = ''){
