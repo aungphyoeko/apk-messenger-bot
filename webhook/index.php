@@ -170,44 +170,12 @@ class Messenger{
         /*prepare response json */
         $this->reply_json = '{
             "recipient":{
-                "id":"'.$this->sender_id;
-        $this->reply_json .= '"
-            },
+                "id":"'.$this->sender_id.'},';
+        $this->reply_json .= '
             "message":{
-                "attachment":{
-                  "type":"template",
-                  "payload":{
-                    "template_type":"generic",
-                    "elements":[
-                       {
-                        "title":"Welcome to Peter\'s Hats",
-                        "image_url":"https://sjccrobotics.com/css/images/current_banner_opt.jpg",
-                        "subtitle":"We\'ve got the right hat for everyone.",
-                        "default_action": {
-                          "type": "web_url",
-                          "url": "https://sjccrobotics.com/",
-                          "messenger_extensions": true,
-                          "webview_height_ratio": "tall",
-                          "fallback_url": "https://sjccrobotics.com/"
-                        },
-                        "buttons":[
-                          {
-                            "type":"web_url",
-                            "url":"https://sjccrobotics.com/",
-                            "title":"View Website"
-                          },{
-                            "type":"postback",
-                            "title":"Start Chatting",
-                            "payload":"DEVELOPER_DEFINED_PAYLOAD"
-                          }              
-                        ]      
-                      }
-                    ]
-                  }
-                }
-            }    
-        }';
-        
+                "text":"hello, world!"                
+            }';  
+        $this->reply_json .='}';
     }
     public function set_reply_message($data = ''){
         if($data == '' && $this->sender_message != ''){
