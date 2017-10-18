@@ -170,7 +170,7 @@ class Messenger{
         /*prepare response json */
         $this->reply_json = '{
             "recipient":{
-                "id":"'.$this->sender_id.'},';
+                "id":"'.$this->sender_id.'"},';
         $this->reply_json .= '
             "message":{
                 "text":"hello, world!"                
