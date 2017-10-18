@@ -95,7 +95,7 @@ class Command{
         $this->fbMessenger->send_message(); 
         $count = 0;
         foreach($this->myTeam->get_team_members() as $position => $name){
-            
+            $count ++;
             $this->fbMessenger->set_reply_message($count.'. '.$position.' : '.$name);
             $this->fbMessenger->send_message(); 
         }
@@ -186,12 +186,47 @@ class Messenger{
                                     "title":"Visit Messenger"
                                 }';
  
-            $this->reply_json .= ']}}';   
-        }
-        else{
-            $this->reply_json .= '"text":" '.$this->reply_message.'"';
-        }
-        $this->reply_json .='
+                    $this->reply_json .= ']}}';   
+                }
+                   
+                else{
+                    //$this->reply_json .= '"text":" '.$this->reply_message.'"';
+                    $this->reply_json .='
+                    "attachment":{
+                        "type":"template",
+                        "payload":{
+                          "template_type":"generic",
+                          "elements":[
+                             {
+                              "title":"Welcome to Peter\'s Hats",
+                              "image_url":"https://petersfancybrownhats.com/company_image.png",
+                              "subtitle":"We\'ve got the right hat for everyone.",
+                              "default_action": {
+                                "type": "web_url",
+                                "url": "https://peterssendreceiveapp.ngrok.io/view?item=103",
+                                "messenger_extensions": true,
+                                "webview_height_ratio": "tall",
+                                "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                              },
+                              "buttons":[
+                                {
+                                  "type":"web_url",
+                                  "url":"https://petersfancybrownhats.com",
+                                  "title":"View Website"
+                                },{
+                                  "type":"postback",
+                                  "title":"Start Chatting",
+                                  "payload":"DEVELOPER_DEFINED_PAYLOAD"
+                                }              
+                              ]      
+                            }
+                          ]
+                        }
+                    }
+';
+                
+                }
+            $this->reply_json .='
         }}';  
         
     }
