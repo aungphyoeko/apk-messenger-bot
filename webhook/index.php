@@ -203,7 +203,9 @@ class Messenger{
                       }
                     ]
                   }
-        }'
+                }
+            }    
+        }';
         
     }
     public function set_reply_message($data = ''){
