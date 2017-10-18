@@ -7,131 +7,20 @@ $fbMessenger->verify_page_access('PAGE_ACCESS_TOKEN');
 if ($fbMessenger->listen_message() == ''){
     return;
 }
-
-$myTeam = new Team();
-
-$command = new Command($fbMessenger,$myTeam);
+$command = new Command($fbMessenger);
 /**** COMMAND CLASS ****/
-class Command{
-    protected $KEYWORDS;
+class Command {
     protected $fbMessenger;
     protected $myTeam;
-    public function __construct($fbMessenger,$myTeam){
+    public function __construct($fbMessenger){
         $hear = $fbMessenger->listen_message();
         if($hear == '') return;
         $this->fbMessenger = $fbMessenger;
-        switch($hear){
-            case 'button':
-            default:
-
-        }
-        /*
-        $this->myTeam = $myTeam;
-        $this->myTeam->read_data_file();
-        $this->KEYWORDS = json_decode(file_get_contents('keywords.json'),true);
-        $this->myTeam->read_data_file();
-        foreach($this->KEYWORDS as $command=>$keywords){
-            foreach ($keywords as $keyword){
-                $matches = preg_match_all('/\b('.$keyword.')\b/',strtolower($hear)); 
-                if($matches > 0) break;  
-            }
-            if($matches > 0) break;
-            $command = '';
-        }
-        switch($command){
-            case 'GREETING':
-                $this->command_greeting();
-                break;
-            case 'BYE':
-                $this->command_bye();
-                break;
-            case 'MEMBERS':
-                $this->command_board_members();
-                break;
-            case 'MEETING':
-                $this->command_meeting();
-                break;
-            case 'INFO':
-                $this->command_info();
-                break; 
-            case 'THANK':
-                $this->command_thank();
-                break;
-            case 'WEBSITE':
-                $this->command_website();
-                break;
-            default:
-                $this->fbMessenger->set_reply_data();
-                $this->fbMessenger->send_message(); 
-        } */
-    }
-    public function command_website(){
-        $message = $this->myTeam->get_team_info();
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_meeting(){
-        $message = $this->myTeam->get_team_meeting();
-        $this->fbMessenger->set_reply_data('There are meetings on every '.$message['day'].' at '.$message['time'].' in '.$message['location'].'.');
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_info(){
-        $message = $this->myTeam->get_team_info();
-        $this->fbMessenger->set_reply_data('Our club name is '.$message['name'].'. Our club description is '. $message['description']);
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_thank(){
-        $this->fbMessenger->set_reply_data($this->myTeam->get_thank_message());
-        $this->fbMessenger->send_message(); 
-
-    }
-    public function command_greeting(){
-        $this->fbMessenger->set_reply_data($this->myTeam->get_greeting_message());
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_bye(){
-        $this->fbMessenger->set_reply_data($this->myTeam->get_goodbye_message());
-        $this->fbMessenger->send_message(); 
-    }
-    public function command_board_members(){
-        $this->fbMessenger->set_reply_data('Our current board members are:');
-        $this->fbMessenger->send_message(); 
-        $count = 0;
-        foreach($this->myTeam->get_team_members() as $position => $name){
-            $count ++;
-            $this->fbMessenger->set_reply_data($count.'. '.$position.' : '.$name);
-            $this->fbMessenger->send_message(); 
-        }
-    }
-} /**** TEAM CLASS ****/
-class Team{
-    protected $TEAM_DATA;
-    public function __construct(){
-        $this->TEAM_DATA = array();
-    }
-    public function read_data_file(){
-        $this->TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
-    }
-    public function get_team_members(){
-        return $this->TEAM_DATA['board-members'];
-    }
-    public function get_team_info(){
-        return $this->TEAM_DATA['info'];
-    }    
-    public function get_team_meeting(){
-        return $this->TEAM_DATA['meeting'];
-    }
-    public function get_greeting_message(){
-        return $this->TEAM_DATA['messages']['greeting'];
-    }
-    public function get_thank_message(){
-        return $this->TEAM_DATA['messages']['thank'];
-    }
-    public function get_goodbye_message(){
-         return $this->TEAM_DATA['messages']['bye'];
+        $this->fbMessenger->set_reply_data($hear);
     }
 }
-/**** Messenger class ****/
-class Messenger{
+/* Messenger class */
+class Messenger {
     protected $PAGE_ACCESS_TOKEN;
     protected $sender_message;
     protected $sender_id;
@@ -161,24 +50,20 @@ class Messenger{
         }
         return false;
     }
+    public function set_reply_data($msg=''){
+        $this->reply_data = new Text($msg);
+        
+    }
     public function encode_reply_message(){
         /*prepare response json */
         $this->reply_json = '{
             "recipient":{
                 "id":"'.$this->sender_id.'"},';
-        $this->reply_json .= '
-            "message":{';
-        if(get_class($this->reply_data) == 'Text'){
-            $this->reply_json .= $this->reply_data->get_text();
-        }
+        $this->reply_json .= '"message":{';
+        
         $this->reply_json .= '}';  
         $this->reply_json .='}';
     }
-    /* 
-    public function set_reply_data($data = ''){
-        $data = preg_replace('/\{name\}/',$this->sender_name,$data);
-        $this->reply_data = $data;
-    } */
 
     public function listen_message(){
         $input = json_decode(file_get_contents('php://input'), true);
