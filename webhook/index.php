@@ -40,7 +40,7 @@ class Command{
                 $this->command_bye();
                 break;
             case 'MEMBERS':
-                $this->command_members();
+                $this->command_board_members();
                 break;
             case 'MEETING':
                 $this->command_meeting();
@@ -90,27 +90,17 @@ class Command{
         $this->fbMessenger->set_reply_message($this->myTeam->get_goodbye_message());
         $this->fbMessenger->send_message(); 
     }
-    public function command_members(){
-        $this->fbMessenger->set_reply_message('Our current active members are:');
+    public function command_board_members(){
+        $this->fbMessenger->set_reply_message('Our current board members are:');
         $this->fbMessenger->send_message(); 
         $count = 0;
         foreach($this->myTeam->get_team_members() as $position => $name){
-            $count ++;
-            if(is_array($name)){
-                foreach ($name as $each){
-                    $this->fbMessenger->set_reply_message($count.'. '.$each);
-                    $this->fbMessenger->send_message(); 
-                    $count++;
-                }
-            }
-            else{
-                $this->fbMessenger->set_reply_message($count.'. '.$position.' : '.$name);
-                $this->fbMessenger->send_message(); 
-            }
+            
+            $this->fbMessenger->set_reply_message($count.'. '.$position.' : '.$name);
+            $this->fbMessenger->send_message(); 
         }
     }
-}
-/**** TEAM CLASS ****/
+} /**** TEAM CLASS ****/
 class Team{
     protected $TEAM_DATA;
     public function __construct(){
@@ -120,7 +110,7 @@ class Team{
         $this->TEAM_DATA = json_decode(file_get_contents('teamdata.json'),true);
     }
     public function get_team_members(){
-        return $this->TEAM_DATA['members'];
+        return $this->TEAM_DATA['board-members'];
     }
     public function get_team_info(){
         return $this->TEAM_DATA['info'];
@@ -182,19 +172,19 @@ class Messenger{
         "recipient":{
             "id":"' . $this->sender_id . '"
             }, "message":{';
-        if(sizeof($this->buttons)>0){
-            $this->reply_json .='
-            "attachment":{
-                "type":"template",
-                "payload":{
-                  "template_type":"button",
-                  "text":"What do you want to do next?",
-                  "buttons":[
-                    {
-                      "type":"web_url",
-                      "url":"https://www.messenger.com",
-                      "title":"Visit Messenger"
-                    }';
+                if(sizeof($this->buttons)>0){
+                    $this->reply_json .='
+                    "attachment":{
+                        "type":"template",
+                        "payload":{
+                            "template_type":"button",
+                            "text":"What do you want to do next?",
+                            "buttons":[
+                                {
+                                    "type":"web_url",
+                                    "url":"https://www.messenger.com",
+                                    "title":"Visit Messenger"
+                                }';
  
             $this->reply_json .= ']}}';   
         }

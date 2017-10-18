@@ -5,15 +5,10 @@
 	"website":"https://sjccrobotics.com/",
 	"image":"https://sjccrobotics.com/css/images/current_banner_opt.jpg"
 },
-"members":{
+"board-members":{
 	"president":"president A",
 	"vice-president":"president B",
-	"others":[
-		"member A",
-		"member B",
-		"member C",
-		"member D"
-	]
+	"treasurer":"member C"
 },
 "projects":{
 	"project A":{
